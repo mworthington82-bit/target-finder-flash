@@ -72,7 +72,7 @@ function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
         <button
           type="button"
           onClick={onOpenPanel}
-          className="inline-flex min-h-11 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <AccessibilityIcon className="h-5 w-5" />
           <span>Accessibility</span>
@@ -94,7 +94,7 @@ function Shell({
   return (
     <div className="relative min-h-dvh bg-background">
       <SiteHeader onOpenPanel={onOpenPanel} />
-      <main className="relative min-h-dvh overflow-hidden px-5 pb-24 pt-28 sm:px-8 sm:pt-32">
+      <main className="relative min-h-dvh overflow-hidden px-5 pb-24 pt-[7.5rem] sm:px-8 sm:pt-[8.5rem]">
         <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
         <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
       </main>
