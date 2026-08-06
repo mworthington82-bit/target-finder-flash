@@ -62,12 +62,13 @@ const WHO = [
 function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
+      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-8">
         <img
           src={logoAsset.url}
           alt="Bradford College"
-          className="bf-invert-on-dark h-6 w-auto max-w-[10rem] object-contain sm:h-7"
+          className="bf-invert-on-dark h-[1.35em] w-auto max-w-[9rem] shrink object-contain object-left"
         />
+
         <button
           type="button"
           onClick={onOpenPanel}
