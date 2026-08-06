@@ -1,5 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import logoAsset from "@/assets/bradford-college-logo.jpg.asset.json";
+import {
+  AccessibilityIcon,
+  AccessibilityPanel,
+  DEFAULT_A11Y,
+  TEXT_SCALE,
+  type A11ySettings,
+} from "@/components/AccessibilityPanel";
 import {
   AREAS,
   BEHAVIOURS,
@@ -11,6 +19,7 @@ import {
   type Question,
   type Target,
 } from "@/lib/bf-data";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
