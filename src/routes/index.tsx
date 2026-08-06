@@ -388,19 +388,19 @@ function Index() {
               value={evidence}
               onChange={(e) => setEvidence(e.target.value)}
               rows={6}
-              className="w-full rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-ring/40"
+              className="w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-ring/30"
               placeholder="What happened, and when?"
             />
-            <label className="mt-6 block text-sm font-medium text-foreground">
+            <label className="mt-8 block text-sm font-medium text-foreground">
               Anything else worth noting (optional)
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
-              className="mt-2 w-full rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-ring/40"
+              className="mt-3 w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-ring/30"
             />
-            <div className="mt-6">
+            <div className="mt-10">
               <PrimaryButton disabled={evidence.trim().length === 0} onClick={() => setStep("context")}>
                 Continue
               </PrimaryButton>
@@ -411,7 +411,7 @@ function Index() {
         {step === "context" && (
           <>
             <Heading>A little context</Heading>
-            <p className="mb-3 text-sm font-medium text-foreground">
+            <p className="mb-4 text-sm font-medium text-foreground">
               How often does this happen with this group?
             </p>
             <div className="space-y-3">
@@ -421,7 +421,7 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <p className="mb-3 mt-8 text-sm font-medium text-foreground">
+            <p className="mb-4 mt-12 text-sm font-medium text-foreground">
               When this happens, which learners is it mostly?
             </p>
             <div className="space-y-3">
@@ -431,13 +431,14 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-6">
+            <div className="mt-10">
               <PrimaryButton disabled={!frequency || !who} onClick={finishContext}>
                 Continue
               </PrimaryButton>
             </div>
           </>
         )}
+
 
         {step === "closecall" && (
           <>
