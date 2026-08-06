@@ -147,19 +147,33 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 @keyframes bf-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
 
 @utility bf-step {
-  animation: bf-fade-in 320ms ease-out both;
+  animation: bf-fade-in 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 @utility bf-display {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
+
+@utility bf-glow {
+  background:
+    radial-gradient(60% 50% at 12% 0%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(50% 45% at 95% 12%, color-mix(in oklab, var(--primary) 9%, transparent), transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf-step { animation: none; }
+}
+
