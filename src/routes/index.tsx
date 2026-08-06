@@ -452,12 +452,13 @@ function Index() {
                   selected={chosenArea === a}
                   onClick={() => setChosenArea(a)}
                 >
-                  <span className="bf-display block text-base text-foreground">{AREAS[a].name}</span>
+                  <span className="bf-display block text-lg text-foreground">{AREAS[a].name}</span>
                   <span className="mt-2 block text-muted-foreground">{AREAS[a].description}</span>
                 </Card>
               ))}
             </div>
-            <div className="mt-6">
+            <div className="mt-10">
+
               <PrimaryButton disabled={!chosenArea} onClick={() => setStep("targets")}>
                 Continue
               </PrimaryButton>
