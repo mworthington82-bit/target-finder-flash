@@ -468,16 +468,18 @@ function Index() {
 
         {step === "targets" && chosenArea && (
           <>
-            <Heading sub={AREAS[chosenArea].description}>{AREAS[chosenArea].name}</Heading>
-            <div className="mb-8 rounded-xl border border-border bg-secondary p-5">
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <Heading size="lg" sub={AREAS[chosenArea].description}>
+              {AREAS[chosenArea].name}
+            </Heading>
+            <div className="mb-12 border-l-2 border-accent py-1 pl-6">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 What good looks like
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-foreground">
+              <p className="mt-3 text-[1.0625rem] leading-8 text-foreground">
                 {AREAS[chosenArea].goodLooksLike}
               </p>
             </div>
-            <p className="mb-3 text-sm font-medium text-foreground">Choose a target</p>
+            <p className="mb-4 text-sm font-medium text-foreground">Choose a target</p>
             <div className="space-y-3">
               {TARGETS[chosenArea].map((t) => (
                 <Card
@@ -489,7 +491,7 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-6">
+            <div className="mt-10">
               <PrimaryButton disabled={!chosenTarget} onClick={() => setStep("reflection")}>
                 Continue
               </PrimaryButton>
@@ -500,38 +502,39 @@ function Index() {
         {step === "reflection" && chosenArea && chosenTarget && (
           <>
             <Heading>Your target</Heading>
-            <div className="rounded-xl border border-accent bg-accent/15 p-5">
-              <p className="text-xs font-medium uppercase tracking-wider text-accent-foreground/70">
+            <div className="rounded-r-[13px] border-l-2 border-accent bg-accent/8 py-6 pl-6 pr-6">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 {AREAS[chosenArea].name}
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-foreground">{chosenTarget.text}</p>
+              <p className="mt-3 text-[1.0625rem] leading-8 text-foreground">{chosenTarget.text}</p>
             </div>
-            <p className="mt-8 text-sm text-muted-foreground">
+            <p className="mt-12 text-sm leading-relaxed text-muted-foreground">
               You don't need to answer these now — they're worth sitting with before you meet your
               Innovator.
             </p>
-            <ul className="mt-4 space-y-3">
-              {chosenTarget.reflections.map((r) => (
-                <li
-                  key={r}
-                  className="rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground"
-                >
-                  {r}
+            <ol className="mt-8 space-y-8">
+              {chosenTarget.reflections.map((r, i) => (
+                <li key={r} className="flex gap-5">
+                  <span className="mt-1 shrink-0 text-xs font-medium tabular-nums text-muted-foreground/70">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[1.0625rem] leading-8 text-foreground">{r}</span>
                 </li>
               ))}
-            </ul>
+            </ol>
             <a
               href={buildFormUrl(AREAS[chosenArea].name, chosenTarget.text)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 block w-full rounded-xl bg-primary px-6 py-4 text-center text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="mt-12 block w-full rounded-[13px] bg-accent px-6 py-4 text-center text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Open the RAISE Target Setting form
             </a>
-            <p className="mt-3 text-center text-xs text-muted-foreground">
+            <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
               Your target will already be filled in. You just need to add your name and department.
             </p>
           </>
+
         )}
       </div>
     </Shell>
