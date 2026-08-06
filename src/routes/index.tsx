@@ -66,7 +66,7 @@ function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
         <img
           src={logoAsset.url}
           alt="Bradford College"
-          className="bf-invert-on-dark h-[1.35em] w-auto max-w-[9rem] shrink object-contain object-left"
+          className="bf-invert-on-dark h-[1.35em] w-auto max-w-[150px] shrink-0 object-contain object-left"
         />
 
         <button
