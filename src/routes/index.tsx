@@ -1,5 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import logoAsset from "@/assets/bradford-college-logo.jpg.asset.json";
+import {
+  AccessibilityIcon,
+  AccessibilityPanel,
+  DEFAULT_A11Y,
+  TEXT_SCALE,
+  type A11ySettings,
+} from "@/components/AccessibilityPanel";
 import {
   AREAS,
   BEHAVIOURS,
@@ -11,6 +19,7 @@ import {
   type Question,
   type Target,
 } from "@/lib/bf-data";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -50,14 +59,49 @@ const WHO = [
   "Most of the group at once",
 ];
 
-function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
+function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background px-5 pb-24 pt-16 sm:px-8 sm:pt-24">
-      <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
-      <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
-    </main>
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-8">
+        <img
+          src={logoAsset.url}
+          alt="Bradford College"
+          className="bf-invert-on-dark h-[1.35em] w-auto max-w-[150px] shrink-0 object-contain object-left"
+        />
+
+        <button
+          type="button"
+          onClick={onOpenPanel}
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          <AccessibilityIcon className="h-5 w-5" />
+          <span>Accessibility</span>
+        </button>
+      </div>
+    </header>
   );
 }
+
+function Shell({
+  children,
+  wide,
+  onOpenPanel,
+}: {
+  children: React.ReactNode;
+  wide?: boolean;
+  onOpenPanel: () => void;
+}) {
+  return (
+    <div className="relative min-h-dvh bg-background">
+      <SiteHeader onOpenPanel={onOpenPanel} />
+      <main className="relative min-h-dvh overflow-hidden px-5 pb-24 pt-[7.5rem] sm:px-8 sm:pt-[8.5rem]">
+        <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
+        <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
+      </main>
+    </div>
+  );
+}
+
 
 function Heading({
   children,
@@ -149,12 +193,21 @@ function Card({
 function ProgressBar({ current, total }: { current: number; total: number }) {
   return (
     <div className="mb-10 flex items-center gap-4">
-      <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
+      <div
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-valuenow={current}
+        aria-valuetext={`Question ${current} of ${total}`}
+        aria-label="Progress through the questions"
+        className="h-[3px] w-full overflow-hidden rounded-full bg-border"
+      >
         <div
           className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out"
           style={{ width: `${(current / total) * 100}%` }}
         />
       </div>
+
       <span className="shrink-0 text-xs font-medium tabular-nums tracking-wide text-muted-foreground">
         {current} of {total}
       </span>
@@ -185,8 +238,28 @@ function PrimaryButton({
 
 
 function Index() {
+  const [a11y, setA11y] = useState<A11ySettings>(DEFAULT_A11Y);
+  const [panelOpen, setPanelOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setA11y((prev) => ({ ...prev, reduceMotion: true }));
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = document.documentElement;
+    el.style.fontSize = `${TEXT_SCALE[a11y.textSize] * 100}%`;
+    el.dataset["bfBg"] = a11y.background;
+    el.dataset["bfSpacing"] = a11y.spacing;
+    el.dataset["bfFont"] = a11y.typeface;
+    el.dataset["bfMotion"] = a11y.reduceMotion ? "reduce" : "full";
+  }, [a11y]);
+
   const [step, setStep] = useState<Step>("welcome");
   const [selected, setSelected] = useState<string[]>([]);
+
   const [focalId, setFocalId] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, AreaId>>({});
   const [qIndex, setQIndex] = useState(0);
@@ -262,8 +335,16 @@ function Index() {
   const key = `${step}-${qIndex}`;
 
   return (
-    <Shell wide={step === "targets"}>
+    <>
+      <AccessibilityPanel
+        open={panelOpen}
+        onClose={() => setPanelOpen(false)}
+        settings={a11y}
+        onChange={setA11y}
+      />
+      <Shell wide={step === "targets"} onOpenPanel={() => setPanelOpen(true)}>
       <div key={key} className="bf-step">
+
         {step === "welcome" && (
           <>
             <div className="pt-6 sm:pt-12">
@@ -537,6 +618,8 @@ function Index() {
 
         )}
       </div>
-    </Shell>
+      </Shell>
+    </>
   );
+
 }
