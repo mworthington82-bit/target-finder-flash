@@ -617,6 +617,8 @@ function Index() {
 
         )}
       </div>
-    </Shell>
+      </Shell>
+    </>
   );
+
 }
