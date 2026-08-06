@@ -262,12 +262,14 @@ function Index() {
   const key = `${step}-${qIndex}`;
 
   return (
-    <Shell>
+    <Shell wide={step === "targets"}>
       <div key={key} className="bf-step">
         {step === "welcome" && (
           <>
-            <Heading>Behaviour First Target Picker</Heading>
-            <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+            <div className="pt-6 sm:pt-12">
+              <Heading size="lg">Behaviour First Target Picker</Heading>
+            </div>
+            <div className="max-w-[54ch] space-y-6 text-base leading-8 text-muted-foreground sm:text-[1.0625rem]">
               <p>
                 This activity helps you find the area your RAISE target should sit in.
               </p>
@@ -279,11 +281,12 @@ function Index() {
                 At the end you'll get a suggested target to take into the RAISE Target Setting form.
               </p>
             </div>
-            <div className="mt-8">
+            <div className="mt-12">
               <PrimaryButton onClick={() => setStep("behaviours")}>Start</PrimaryButton>
             </div>
           </>
         )}
+
 
         {step === "behaviours" && (
           <>
