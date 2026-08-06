@@ -590,8 +590,8 @@ function Index() {
               <p className="mt-3 text-[1.0625rem] leading-8 text-foreground">{chosenTarget.text}</p>
             </div>
             <p className="mt-12 text-sm leading-relaxed text-muted-foreground">
-              You don't need to answer these now — they're worth sitting with before you meet your
-              Innovator.
+              Use these questions to start thinking about how you will develop this target. You don't
+              need answers straight away — but they're where your action plan begins.
             </p>
             <ol className="mt-8 space-y-8">
               {chosenTarget.reflections.map((r, i) => (
@@ -603,19 +603,43 @@ function Index() {
                 </li>
               ))}
             </ol>
-            <a
-              href={buildFormUrl(AREAS[chosenArea].name, chosenTarget.text)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-12 block w-full rounded-[13px] bg-accent px-6 py-4 text-center text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              Open the RAISE Target Setting form
-            </a>
-            <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
-              Your target will already be filled in. You just need to add your name and department.
-            </p>
+            <div className="mt-12 rounded-[13px] border border-border bg-card p-6 sm:p-8">
+              <h2 className="bf-display text-lg font-medium text-foreground">What happens next</h2>
+              <ol className="mt-6 space-y-8">
+                <li className="flex gap-5">
+                  <span className="bf-display mt-0.5 shrink-0 text-sm font-medium tabular-nums text-accent">
+                    01
+                  </span>
+                  <div className="space-y-3">
+                    <p className="text-[1.0625rem] leading-7 text-foreground">
+                      <span className="font-medium">Submit your target.</span> Open the RAISE Target
+                      Setting form and submit it. Your target will already be filled in — you just need
+                      to add your name and department.
+                    </p>
+                    <a
+                      href={buildFormUrl(AREAS[chosenArea].name, chosenTarget.text)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-center rounded-[13px] bg-accent px-6 py-4 text-center text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
+                    >
+                      Open the RAISE Target Setting form
+                    </a>
+                  </div>
+                </li>
+                <li className="flex gap-5">
+                  <span className="bf-display mt-0.5 shrink-0 text-sm font-medium tabular-nums text-muted-foreground/70">
+                    02
+                  </span>
+                  <p className="text-base leading-7 text-muted-foreground">
+                    <span className="font-medium text-foreground">Start your action plan in RAISE.</span>{" "}
+                    Your target will appear in your RAISE app shortly after you submit the form. Log in,
+                    and use the questions above to start writing how you will develop and achieve it.
+                    You can keep building on it over time, and you'll talk it through with your Innovator.
+                  </p>
+                </li>
+              </ol>
+            </div>
           </>
-
         )}
       </div>
       </Shell>
