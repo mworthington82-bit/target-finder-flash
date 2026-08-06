@@ -192,12 +192,21 @@ function Card({
 function ProgressBar({ current, total }: { current: number; total: number }) {
   return (
     <div className="mb-10 flex items-center gap-4">
-      <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
+      <div
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-valuenow={current}
+        aria-valuetext={`Question ${current} of ${total}`}
+        aria-label="Progress through the questions"
+        className="h-[3px] w-full overflow-hidden rounded-full bg-border"
+      >
         <div
           className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out"
           style={{ width: `${(current / total) * 100}%` }}
         />
       </div>
+
       <span className="shrink-0 text-xs font-medium tabular-nums tracking-wide text-muted-foreground">
         {current} of {total}
       </span>
