@@ -347,10 +347,9 @@ function Index() {
 
         {step === "questions" && questionPlan[qIndex] && (
           <>
-            <p className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Question {qIndex + 1} of {questionPlan.length}
-            </p>
+            <ProgressBar current={qIndex + 1} total={questionPlan.length} />
             <Heading>{questionPlan[qIndex].q.stem}</Heading>
+
             <div className="space-y-3">
               {questionPlan[qIndex].q.options.map((o) => (
                 <Card
