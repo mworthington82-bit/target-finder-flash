@@ -334,8 +334,16 @@ function Index() {
   const key = `${step}-${qIndex}`;
 
   return (
-    <Shell wide={step === "targets"}>
+    <>
+      <AccessibilityPanel
+        open={panelOpen}
+        onClose={() => setPanelOpen(false)}
+        settings={a11y}
+        onChange={setA11y}
+      />
+      <Shell wide={step === "targets"} onOpenPanel={() => setPanelOpen(true)}>
       <div key={key} className="bf-step">
+
         {step === "welcome" && (
           <>
             <div className="pt-6 sm:pt-12">
