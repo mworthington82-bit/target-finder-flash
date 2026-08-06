@@ -50,20 +50,56 @@ const WHO = [
   "Most of the group at once",
 ];
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
   return (
-    <main className="min-h-screen bg-background px-4 py-10 sm:px-6 sm:py-16">
-      <div className="mx-auto w-full max-w-2xl">{children}</div>
+    <main className="relative min-h-screen overflow-hidden bg-background px-5 pb-24 pt-16 sm:px-8 sm:pt-24">
+      <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
+      <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
     </main>
   );
 }
 
-function Heading({ children, sub }: { children: React.ReactNode; sub?: string }) {
+function Heading({
+  children,
+  sub,
+  size = "md",
+}: {
+  children: React.ReactNode;
+  sub?: string;
+  size?: "md" | "lg";
+}) {
   return (
-    <header className="mb-7">
-      <h1 className="bf-display text-2xl leading-tight text-foreground sm:text-3xl">{children}</h1>
-      {sub ? <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{sub}</p> : null}
+    <header className="mb-9">
+      <h1
+        className={[
+          "bf-display text-balance text-foreground",
+          size === "lg"
+            ? "text-[2.1rem] leading-[1.12] sm:text-[3rem]"
+            : "text-[1.75rem] leading-[1.18] sm:text-[2.35rem]",
+        ].join(" ")}
+      >
+        {children}
+      </h1>
+      {sub ? (
+        <p className="mt-4 max-w-[58ch] text-[0.95rem] leading-relaxed text-muted-foreground sm:text-base">
+          {sub}
+        </p>
+      ) : null}
     </header>
+  );
+}
+
+function CheckMark() {
+  return (
+    <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" aria-hidden="true">
+      <path
+        d="M4 10.5 8.2 14.5 16 6"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
@@ -85,16 +121,44 @@ function Card({
       disabled={disabled}
       aria-pressed={!!selected}
       className={[
-        "w-full rounded-xl border p-5 text-left text-sm leading-relaxed transition-all",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "group relative w-full rounded-[13px] border p-5 pr-14 text-left text-[0.95rem] leading-relaxed",
+        "transition-all duration-150 ease-out",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         selected
-          ? "border-accent bg-accent/15 text-foreground shadow-sm"
-          : "border-border bg-card text-foreground hover:border-primary/40 hover:shadow-sm",
-        disabled && !selected ? "cursor-not-allowed opacity-45 hover:border-border hover:shadow-none" : "",
+          ? "border-accent bg-accent/8 text-foreground shadow-[0_2px_10px_-6px_color-mix(in_oklab,var(--accent)_60%,transparent)]"
+          : "border-border bg-card text-foreground hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-[0_6px_18px_-14px_var(--foreground)]",
+        disabled && !selected ? "cursor-not-allowed opacity-40 hover:translate-y-0 hover:border-border hover:shadow-none" : "",
       ].join(" ")}
     >
       {children}
+      <span
+        className={[
+          "absolute right-4 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border transition-all duration-150",
+          selected
+            ? "border-accent bg-accent text-accent-foreground opacity-100"
+            : "border-border bg-transparent text-transparent opacity-0 group-hover:opacity-40",
+        ].join(" ")}
+        aria-hidden="true"
+      >
+        <CheckMark />
+      </span>
     </button>
+  );
+}
+
+function ProgressBar({ current, total }: { current: number; total: number }) {
+  return (
+    <div className="mb-10 flex items-center gap-4">
+      <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
+        <div
+          className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out"
+          style={{ width: `${(current / total) * 100}%` }}
+        />
+      </div>
+      <span className="shrink-0 text-xs font-medium tabular-nums tracking-wide text-muted-foreground">
+        {current} of {total}
+      </span>
+    </div>
   );
 }
 
@@ -112,12 +176,13 @@ function PrimaryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full rounded-xl bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+      className="w-full rounded-[13px] bg-accent px-7 py-4 text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground sm:w-auto"
     >
       {children}
     </button>
   );
 }
+
 
 function Index() {
   const [step, setStep] = useState<Step>("welcome");
