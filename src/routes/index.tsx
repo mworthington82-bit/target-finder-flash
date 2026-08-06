@@ -237,8 +237,28 @@ function PrimaryButton({
 
 
 function Index() {
+  const [a11y, setA11y] = useState<A11ySettings>(DEFAULT_A11Y);
+  const [panelOpen, setPanelOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setA11y((prev) => ({ ...prev, reduceMotion: true }));
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = document.documentElement;
+    el.style.fontSize = `${TEXT_SCALE[a11y.textSize] * 100}%`;
+    el.dataset["bfBg"] = a11y.background;
+    el.dataset["bfSpacing"] = a11y.spacing;
+    el.dataset["bfFont"] = a11y.typeface;
+    el.dataset["bfMotion"] = a11y.reduceMotion ? "reduce" : "full";
+  }, [a11y]);
+
   const [step, setStep] = useState<Step>("welcome");
   const [selected, setSelected] = useState<string[]>([]);
+
   const [focalId, setFocalId] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, AreaId>>({});
   const [qIndex, setQIndex] = useState(0);
