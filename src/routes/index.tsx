@@ -59,14 +59,48 @@ const WHO = [
   "Most of the group at once",
 ];
 
-function Shell({ children, wide }: { children: React.ReactNode; wide?: boolean }) {
+function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background px-5 pb-24 pt-16 sm:px-8 sm:pt-24">
-      <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
-      <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
-    </main>
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-8">
+        <img
+          src={logoAsset.url}
+          alt="Bradford College"
+          className="bf-invert-on-dark h-6 w-auto max-w-[10rem] object-contain sm:h-7"
+        />
+        <button
+          type="button"
+          onClick={onOpenPanel}
+          className="inline-flex min-h-11 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          <AccessibilityIcon className="h-5 w-5" />
+          <span>Accessibility</span>
+        </button>
+      </div>
+    </header>
   );
 }
+
+function Shell({
+  children,
+  wide,
+  onOpenPanel,
+}: {
+  children: React.ReactNode;
+  wide?: boolean;
+  onOpenPanel: () => void;
+}) {
+  return (
+    <div className="relative min-h-dvh bg-background">
+      <SiteHeader onOpenPanel={onOpenPanel} />
+      <main className="relative min-h-dvh overflow-hidden px-5 pb-24 pt-28 sm:px-8 sm:pt-32">
+        <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
+        <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
+      </main>
+    </div>
+  );
+}
+
 
 function Heading({
   children,
