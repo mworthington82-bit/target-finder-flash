@@ -597,12 +597,11 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-10">
-
-              <PrimaryButton disabled={!chosenArea} onClick={() => setStep("targets")}>
+            <Actions onBack={() => setStep("context")}>
+              <PrimaryButton inline disabled={!chosenArea} onClick={() => setStep("targets")}>
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
