@@ -361,8 +361,11 @@ function Index() {
   }
 
   function finishContext() {
-    if (result.margin <= 2) setStep("closecall");
-    else {
+    if (result.margin <= 2) {
+      setViaCloseCall(true);
+      setStep("closecall");
+    } else {
+      setViaCloseCall(false);
       setChosenArea(result.top);
       setStep("targets");
     }
