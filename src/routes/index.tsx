@@ -303,6 +303,8 @@ function Index() {
   const [who, setWho] = useState<string | null>(null);
   const [chosenArea, setChosenArea] = useState<AreaId | null>(null);
   const [chosenTarget, setChosenTarget] = useState<Target | null>(null);
+  const [plannedFocalId, setPlannedFocalId] = useState<string | null>(null);
+  const [viaCloseCall, setViaCloseCall] = useState(false);
 
   const focal = useMemo(
     () => BEHAVIOURS.find((b) => b.id === focalId) ?? null,
