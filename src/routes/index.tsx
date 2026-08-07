@@ -425,12 +425,18 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <p className="mt-5 text-xs text-muted-foreground">{selected.length} of 5 selected</p>
-            <div className="mt-4">
-              <PrimaryButton disabled={selected.length < 3} onClick={() => setStep("focal")}>
+            <p className="mt-5 text-xs text-muted-foreground" aria-live="polite">
+              {selected.length < 3
+                ? selected.length === 0
+                  ? "Select at least three"
+                  : `${selected.length} selected — choose at least three`
+                : `${selected.length} of 5 selected`}
+            </p>
+            <Actions onBack={() => setStep("welcome")}>
+              <PrimaryButton inline disabled={selected.length < 3} onClick={() => setStep("focal")}>
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
@@ -450,24 +456,31 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-6">
+            <Actions onBack={() => setStep("behaviours")}>
               <PrimaryButton
+                inline
                 disabled={!focalId}
                 onClick={() => {
-                  setAnswers({});
+                  if (focalId !== plannedFocalId) {
+                    setAnswers({});
+                    setPlannedFocalId(focalId);
+                  }
                   setQIndex(0);
                   setStep("questions");
                 }}
               >
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
         {step === "questions" && questionPlan[qIndex] && (
           <>
             <ProgressBar current={qIndex + 1} total={questionPlan.length} />
+            {qIndex === 0 && (
+              <p className="-mt-7 mb-10 text-xs text-muted-foreground">Tap an answer to continue.</p>
+            )}
             <Heading>{questionPlan[qIndex].q.stem}</Heading>
 
             <div className="space-y-3">
@@ -487,17 +500,15 @@ function Index() {
                 </Card>
               ))}
             </div>
-            {qIndex > 0 && (
-              <button
-                type="button"
-                onClick={() => setQIndex(qIndex - 1)}
-                className="mt-6 text-xs text-muted-foreground underline underline-offset-4"
-              >
-                Back
-              </button>
-            )}
+            <Actions
+              onBack={() => {
+                if (qIndex > 0) setQIndex(qIndex - 1);
+                else setStep("focal");
+              }}
+            />
           </>
         )}
+
 
         {step === "evidence" && focal && (
           <>
