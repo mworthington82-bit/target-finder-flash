@@ -373,6 +373,9 @@ function Index() {
 
   const key = `${step}-${qIndex}`;
 
+  const formUrl =
+    chosenArea && chosenTarget ? buildFormUrl(AREAS[chosenArea].name, chosenTarget.text) : "";
+
   return (
     <>
       <AccessibilityPanel
