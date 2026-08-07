@@ -219,22 +219,56 @@ function PrimaryButton({
   children,
   onClick,
   disabled,
+  inline,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
+  inline?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full rounded-[13px] bg-accent px-7 py-4 text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground sm:w-auto"
+      className={[
+        "rounded-[13px] bg-accent px-7 py-4 text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground",
+        inline ? "w-auto" : "w-full sm:w-auto",
+      ].join(" ")}
     >
       {children}
     </button>
   );
 }
+
+function BackButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex min-h-11 items-center gap-2 rounded-[13px] border border-border bg-card px-5 py-3 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
+      <span aria-hidden="true">←</span>
+      <span>Back</span>
+    </button>
+  );
+}
+
+function Actions({
+  onBack,
+  children,
+}: {
+  onBack: () => void;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
+      <BackButton onClick={onBack} />
+      {children ?? <span />}
+    </div>
+  );
+}
+
 
 
 function Index() {
@@ -269,6 +303,8 @@ function Index() {
   const [who, setWho] = useState<string | null>(null);
   const [chosenArea, setChosenArea] = useState<AreaId | null>(null);
   const [chosenTarget, setChosenTarget] = useState<Target | null>(null);
+  const [plannedFocalId, setPlannedFocalId] = useState<string | null>(null);
+  const [viaCloseCall, setViaCloseCall] = useState(false);
 
   const focal = useMemo(
     () => BEHAVIOURS.find((b) => b.id === focalId) ?? null,
@@ -325,8 +361,11 @@ function Index() {
   }
 
   function finishContext() {
-    if (result.margin <= 2) setStep("closecall");
-    else {
+    if (result.margin <= 2) {
+      setViaCloseCall(true);
+      setStep("closecall");
+    } else {
+      setViaCloseCall(false);
       setChosenArea(result.top);
       setStep("targets");
     }
@@ -386,12 +425,18 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <p className="mt-5 text-xs text-muted-foreground">{selected.length} of 5 selected</p>
-            <div className="mt-4">
-              <PrimaryButton disabled={selected.length < 3} onClick={() => setStep("focal")}>
+            <p className="mt-5 text-xs text-muted-foreground" aria-live="polite">
+              {selected.length < 3
+                ? selected.length === 0
+                  ? "Select at least three"
+                  : `${selected.length} selected — choose at least three`
+                : `${selected.length} of 5 selected`}
+            </p>
+            <Actions onBack={() => setStep("welcome")}>
+              <PrimaryButton inline disabled={selected.length < 3} onClick={() => setStep("focal")}>
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
@@ -411,24 +456,31 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-6">
+            <Actions onBack={() => setStep("behaviours")}>
               <PrimaryButton
+                inline
                 disabled={!focalId}
                 onClick={() => {
-                  setAnswers({});
+                  if (focalId !== plannedFocalId) {
+                    setAnswers({});
+                    setPlannedFocalId(focalId);
+                  }
                   setQIndex(0);
                   setStep("questions");
                 }}
               >
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
         {step === "questions" && questionPlan[qIndex] && (
           <>
             <ProgressBar current={qIndex + 1} total={questionPlan.length} />
+            {qIndex === 0 && (
+              <p className="-mt-7 mb-10 text-xs text-muted-foreground">Tap an answer to continue.</p>
+            )}
             <Heading>{questionPlan[qIndex].q.stem}</Heading>
 
             <div className="space-y-3">
@@ -448,17 +500,15 @@ function Index() {
                 </Card>
               ))}
             </div>
-            {qIndex > 0 && (
-              <button
-                type="button"
-                onClick={() => setQIndex(qIndex - 1)}
-                className="mt-6 text-xs text-muted-foreground underline underline-offset-4"
-              >
-                Back
-              </button>
-            )}
+            <Actions
+              onBack={() => {
+                if (qIndex > 0) setQIndex(qIndex - 1);
+                else setStep("focal");
+              }}
+            />
           </>
         )}
+
 
         {step === "evidence" && focal && (
           <>
@@ -481,11 +531,20 @@ function Index() {
               rows={3}
               className="mt-3 w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-ring/30"
             />
-            <div className="mt-10">
-              <PrimaryButton disabled={evidence.trim().length === 0} onClick={() => setStep("context")}>
+            <Actions
+              onBack={() => {
+                setQIndex(Math.max(0, questionPlan.length - 1));
+                setStep("questions");
+              }}
+            >
+              <PrimaryButton
+                inline
+                disabled={evidence.trim().length === 0}
+                onClick={() => setStep("context")}
+              >
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
@@ -512,11 +571,11 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-10">
-              <PrimaryButton disabled={!frequency || !who} onClick={finishContext}>
+            <Actions onBack={() => setStep("evidence")}>
+              <PrimaryButton inline disabled={!frequency || !who} onClick={finishContext}>
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
@@ -538,12 +597,11 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-10">
-
-              <PrimaryButton disabled={!chosenArea} onClick={() => setStep("targets")}>
+            <Actions onBack={() => setStep("context")}>
+              <PrimaryButton inline disabled={!chosenArea} onClick={() => setStep("targets")}>
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
@@ -572,11 +630,11 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-10">
-              <PrimaryButton disabled={!chosenTarget} onClick={() => setStep("reflection")}>
-                Continue
+            <Actions onBack={() => setStep(viaCloseCall ? "closecall" : "context")}>
+              <PrimaryButton inline disabled={!chosenTarget} onClick={() => setStep("reflection")}>
+                {chosenTarget ? "Continue with this target" : "Continue"}
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
@@ -639,7 +697,9 @@ function Index() {
                 </li>
               </ol>
             </div>
+            <Actions onBack={() => setStep("targets")} />
           </>
+
         )}
       </div>
       </Shell>
