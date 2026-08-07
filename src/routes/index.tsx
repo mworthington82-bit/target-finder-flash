@@ -478,9 +478,6 @@ function Index() {
         {step === "questions" && questionPlan[qIndex] && (
           <>
             <ProgressBar current={qIndex + 1} total={questionPlan.length} />
-            {qIndex === 0 && (
-              <p className="-mt-7 mb-10 text-xs text-muted-foreground">Tap an answer to continue.</p>
-            )}
             <Heading>{questionPlan[qIndex].q.stem}</Heading>
 
             <div className="space-y-3">
@@ -488,13 +485,7 @@ function Index() {
                 <Card
                   key={o.text}
                   selected={answers[qIndex] === o.area}
-                  onClick={() => {
-                    setAnswers((prev) => ({ ...prev, [qIndex]: o.area }));
-                    setTimeout(() => {
-                      if (qIndex + 1 < questionPlan.length) setQIndex(qIndex + 1);
-                      else setStep("evidence");
-                    }, 180);
-                  }}
+                  onClick={() => setAnswers((prev) => ({ ...prev, [qIndex]: o.area }))}
                 >
                   {o.text}
                 </Card>
@@ -505,7 +496,18 @@ function Index() {
                 if (qIndex > 0) setQIndex(qIndex - 1);
                 else setStep("focal");
               }}
-            />
+            >
+              <PrimaryButton
+                inline
+                disabled={!answers[qIndex]}
+                onClick={() => {
+                  if (qIndex + 1 < questionPlan.length) setQIndex(qIndex + 1);
+                  else setStep("evidence");
+                }}
+              >
+                Continue
+              </PrimaryButton>
+            </Actions>
           </>
         )}
 
