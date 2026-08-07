@@ -531,11 +531,20 @@ function Index() {
               rows={3}
               className="mt-3 w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-ring/30"
             />
-            <div className="mt-10">
-              <PrimaryButton disabled={evidence.trim().length === 0} onClick={() => setStep("context")}>
+            <Actions
+              onBack={() => {
+                setQIndex(Math.max(0, questionPlan.length - 1));
+                setStep("questions");
+              }}
+            >
+              <PrimaryButton
+                inline
+                disabled={evidence.trim().length === 0}
+                onClick={() => setStep("context")}
+              >
                 Continue
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
