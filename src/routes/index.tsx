@@ -630,11 +630,11 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-10">
-              <PrimaryButton disabled={!chosenTarget} onClick={() => setStep("reflection")}>
-                Continue
+            <Actions onBack={() => setStep(viaCloseCall ? "closecall" : "context")}>
+              <PrimaryButton inline disabled={!chosenTarget} onClick={() => setStep("reflection")}>
+                {chosenTarget ? "Continue with this target" : "Continue"}
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
