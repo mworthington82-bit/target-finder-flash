@@ -680,7 +680,7 @@ function Index() {
                       to add your name and department.
                     </p>
                     <a
-                      href={buildFormUrl(AREAS[chosenArea].name, chosenTarget.text)}
+                      href={formUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex w-full items-center justify-center rounded-[13px] bg-accent px-6 py-4 text-center text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
