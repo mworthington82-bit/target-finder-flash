@@ -219,22 +219,56 @@ function PrimaryButton({
   children,
   onClick,
   disabled,
+  inline,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   disabled?: boolean;
+  inline?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full rounded-[13px] bg-accent px-7 py-4 text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground sm:w-auto"
+      className={[
+        "rounded-[13px] bg-accent px-7 py-4 text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground",
+        inline ? "w-auto" : "w-full sm:w-auto",
+      ].join(" ")}
     >
       {children}
     </button>
   );
 }
+
+function BackButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex min-h-11 items-center gap-2 rounded-[13px] border border-border bg-card px-5 py-3 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
+      <span aria-hidden="true">←</span>
+      <span>Back</span>
+    </button>
+  );
+}
+
+function Actions({
+  onBack,
+  children,
+}: {
+  onBack: () => void;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
+      <BackButton onClick={onBack} />
+      {children ?? <span />}
+    </div>
+  );
+}
+
 
 
 function Index() {
