@@ -697,7 +697,9 @@ function Index() {
                 </li>
               </ol>
             </div>
+            <Actions onBack={() => setStep("targets")} />
           </>
+
         )}
       </div>
       </Shell>
