@@ -680,6 +680,9 @@ function Index() {
                       to add your name and department.
                     </p>
                     <a
+                      ref={(el) => {
+                        if (el) console.log("[Behaviour First] form URL:", el.getAttribute("href"));
+                      }}
                       href={formUrl}
                       target="_blank"
                       rel="noopener noreferrer"

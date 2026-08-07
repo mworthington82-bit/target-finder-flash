@@ -726,7 +726,7 @@ export function buildFormUrl(areaName: string, targetText: string) {
   return (
     FORM_BASE +
     "&r201037595f474987ab68489c6f24e60e=" +
-    encodeURIComponent(areaName) +
+    encodeURIComponent('"' + areaName + '"') +
     "&rf9807d1c59fa41239009427d48fa12e8=" +
     encodeURIComponent(targetText)
   );
