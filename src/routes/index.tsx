@@ -107,7 +107,6 @@ function SiteHeader({
                 type="button"
                 onClick={() => setConfirming(true)}
                 className="rounded-[8px] px-1 py-2 text-[0.8125rem] font-normal text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                aria-label={confirming ? "Start again?" : "Start again"}
               >
                 {confirming ? "Start again?" : "Start again"}
               </button>
