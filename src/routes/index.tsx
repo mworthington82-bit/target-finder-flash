@@ -407,7 +407,7 @@ function Index() {
         onChange={setA11y}
       />
       <Shell wide={step === "targets"} onOpenPanel={() => setPanelOpen(true)}>
-      <div className="bf-step">
+      <div key={key} className="bf-step">
 
         {step === "welcome" && (
           <>
