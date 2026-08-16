@@ -273,3 +273,52 @@
 }
 
 
+
+/* ---------- Hint reveal ---------- */
+
+.bf-hint-hidden { display: none; }
+
+/* ---------- Print ---------- */
+
+@media print {
+  html {
+    font-size: 100% !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+  .bf-print-area,
+  .bf-print-area * {
+    visibility: visible !important;
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .bf-print-area {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    padding: 0;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+  .bf-print-area .bf-hint-hidden {
+    display: block !important;
+  }
+  .bf-no-print,
+  .bf-no-print * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  header,
+  nav,
+  button,
+  a[href] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}

@@ -28,6 +28,8 @@ export interface Target {
   id: string;
   text: string;
   reflections: string[];
+  hints: string[];
+  pedagogy: string;
 }
 
 export const TIE_ORDER: AreaId[] = ["AREA6", "AREA2", "AREA5", "AREA4", "AREA3", "AREA1"];
@@ -552,6 +554,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "When did learners last meet that idea, and in what form?",
         "What would you notice if half the group arrived without it?",
       ],
+      hints: [
+        "Open next week's lesson. Name the one thing it expects them to know.",
+        "Find the week it was taught. Look at what they actually produced.",
+        "Picture six learners stuck at task one. What are they doing?",
+      ],
+      pedagogy: "Rosenshine's Principles of Instruction — the case for beginning every lesson with a short review of earlier learning.",
     },
     {
       id: "A1T2",
@@ -561,6 +569,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What did last term's work make possible that this week depends on?",
         "Where in the session would that connection best land?",
       ],
+      hints: [
+        "Say your answer out loud. Time it. Under twenty seconds?",
+        "Put last term's task next to this week's. Name the link.",
+        "Walk through your session. Mark the minute you would say it.",
+      ],
+      pedagogy: "Ausubel's meaningful learning — new ideas stick when learners can hook them onto what they already know.",
     },
     {
       id: "A1T3",
@@ -570,6 +584,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "At what point in a unit do gaps usually surface, and is that too late?",
         "What would you do differently if you knew in week one rather than week six?",
       ],
+      hints: [
+        "Look back at your last three lessons. When did you last check?",
+        "Take last term's marks. Find the week the drop appeared.",
+        "Name the week one task that would have shown you.",
+      ],
+      pedagogy: "Diagnostic assessment — short checks placed before teaching rather than after, so gaps show while there is still time.",
     },
   ],
   AREA2: [
@@ -581,6 +601,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What currently signals to learners that they can stop?",
         "Which task this week could not be completed without reasoning?",
       ],
+      hints: [
+        "Pull two pieces of learner work. Put them side by side.",
+        "Watch one learner finish. What do they do next?",
+        "Read this week's tasks. Count how many need a because.",
+      ],
+      pedagogy: "Bloom's revised taxonomy — the difference between recalling an answer and analysing, evaluating or creating with it.",
     },
     {
       id: "A2T2",
@@ -590,6 +616,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Whose reasoning do you hear, and whose do you only ever see written down?",
         "What would a strong justification sound like in your subject?",
       ],
+      hints: [
+        "Count your questions in ten minutes. How many were follow-ups?",
+        "Take your register. Name three you never hear explain.",
+        "Say one aloud yourself. Write down the words you used.",
+      ],
+      pedagogy: "Alexander's dialogic teaching — learning deepens when classroom talk goes past single answers into extended reasoning.",
     },
     {
       id: "A2T3",
@@ -599,6 +631,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What happens in your room when someone finishes first?",
         "What would make depth the obvious next move rather than an optional extra?",
       ],
+      hints: [
+        "Look at the worksheet. Is the harder part visible on page one?",
+        "Picture your fastest learner at minute twenty. Where are they?",
+        "Read your task wording. Where does it say stop?",
+      ],
+      pedagogy: "Vygotsky's zone of proximal development — learners grow most on work just beyond what they can already do alone.",
     },
   ],
   AREA3: [
@@ -610,6 +648,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What are learners doing in the first sixty seconds after they arrive?",
         "When drift starts, what is the task asking of them at that moment?",
       ],
+      hints: [
+        "Walk through your last session minute by minute. Where does nothing happen?",
+        "Picture the doorway. What do the first three through it do?",
+        "Note the clock time drift starts. Look at that task.",
+      ],
+      pedagogy: "Tom Bennett's Creating a Culture — behaviour improves when routines are taught deliberately rather than assumed.",
     },
     {
       id: "A3T2",
@@ -619,6 +663,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "How many transitions does your session contain, and how long does each take?",
         "What would have to be true for the first five minutes to run without you?",
       ],
+      hints: [
+        "Stand at the door of your empty room. What can they see?",
+        "Count the changeovers in one session. Time the longest.",
+        "Picture yourself arriving late. What would they start?",
+      ],
+      pedagogy: "Doug Lemov's Teach Like a Champion — routines such as a Do Now put learners to work the moment they arrive.",
     },
     {
       id: "A3T3",
@@ -628,6 +678,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What tells a learner their work will actually be looked at?",
         "Where in that stretch does attention usually go?",
       ],
+      hints: [
+        "Time it next session. Write the number down.",
+        "Ask three learners when you last read their work.",
+        "Watch the clock during independent work. Note the minute it slips.",
+      ],
+      pedagogy: "Sweller's cognitive load theory — attention holds when a task is clear and does not overload working memory.",
     },
   ],
   AREA4: [
@@ -639,6 +695,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "How long do they typically wait?",
         "What do the first five minutes look like from their seat?",
       ],
+      hints: [
+        "Name one learner. What could they do in the first two minutes unaided?",
+        "Time the gap between them sitting down and someone reaching them.",
+        "Sit in their chair. Look at what is in front of you.",
+      ],
+      pedagogy: "The EEF's SEND in Mainstream Schools guidance — strong teaching for everyone comes before individual adult support.",
     },
     {
       id: "A4T2",
@@ -648,6 +710,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would you remove first, and what would happen?",
         "How would you know a learner no longer needed it?",
       ],
+      hints: [
+        "Look at your walls and handouts. Note what has not changed.",
+        "Pick one prompt sheet. Picture the lesson without it.",
+        "Name one learner who never looks at it any more.",
+      ],
+      pedagogy: "Wood, Bruner and Ross on scaffolding — support is meant to be temporary and removed as competence grows.",
     },
     {
       id: "A4T3",
@@ -657,6 +725,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What route into contributing exists that doesn't require speaking first?",
         "What would have to change for their thinking to be visible to you every session?",
       ],
+      hints: [
+        "Take your register. Tick who you actually heard from last lesson.",
+        "List the ways a learner can answer without using their voice.",
+        "Count how many learners you saw real evidence from last session.",
+      ],
+      pedagogy: "Dylan Wiliam's Embedding Formative Assessment — all-learner response methods make quiet learners' thinking visible.",
     },
   ],
   AREA5: [
@@ -668,6 +742,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What could answer that question instead of you?",
         "What would they need to be sure of to begin alone?",
       ],
+      hints: [
+        "Listen next session. Write down their exact words.",
+        "Look at the desk. What is there to check against?",
+        "Watch one learner's first move. Where do they pause?",
+      ],
+      pedagogy: "Rosenshine's Principles of Instruction — the case for modelling first, then withdrawing support in planned steps.",
     },
     {
       id: "A5T2",
@@ -677,6 +757,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Which idea does your subject keep needing, and how often does it come back?",
         "What would regular return look like in your scheme of work?",
       ],
+      hints: [
+        "Read your scheme of work. Find a topic taught only once.",
+        "Name the idea. Count the weeks it appears.",
+        "Look at next month's plan. Mark where it could come back.",
+      ],
+      pedagogy: "Ebbinghaus's forgetting curve and spaced practice — knowledge fades unless it is deliberately revisited over time.",
     },
     {
       id: "A5T3",
@@ -686,6 +772,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Who currently spots the errors in your room?",
         "What would let a learner catch their own mistake before you do?",
       ],
+      hints: [
+        "Watch a stuck learner for a minute. What do they reach for?",
+        "Look at your last marked set. Count the corrections in your pen.",
+        "Pick one common error. Name how it shows itself.",
+      ],
+      pedagogy: "Ericsson's deliberate practice — skill grows when learners work on precise weaknesses and correct their own errors.",
     },
   ],
   AREA6: [
@@ -697,6 +789,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "If you could check one thing per session, what would be worth checking?",
         "What happens to what you find out?",
       ],
+      hints: [
+        "Take your register. Tick who you actually heard from last lesson.",
+        "Look at next lesson's objective. Name the one idea it rests on.",
+        "Recall your last check. Say what you did in the ten minutes after.",
+      ],
+      pedagogy: "Black and Wiliam's Inside the Black Box — checking understanding during a lesson lifts results more than marking after it.",
     },
     {
       id: "A6T2",
@@ -706,6 +804,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What happens to feedback after it is given?",
         "When does acting on it actually happen in your session?",
       ],
+      hints: [
+        "Ask three learners what they are working on. Write the answers down.",
+        "Open two pieces of work. Look for what changed after your comment.",
+        "Walk through your session. Mark the minutes set aside for it.",
+      ],
+      pedagogy: "Hattie and Timperley's model of feedback — feedback only works when learners are given time to act on it.",
     },
     {
       id: "A6T3",
@@ -715,6 +819,12 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would “early enough” mean in your subject?",
         "What would you change on the spot if you knew at minute ten?",
       ],
+      hints: [
+        "Take your last assessment. Note the week that topic was taught.",
+        "Pick one topic. Name the lesson where a wrong idea takes hold.",
+        "Picture minute ten. What is on the board then?",
+      ],
+      pedagogy: "Dylan Wiliam's hinge questions — one well-placed question mid-lesson shows whether to move on or reteach.",
     },
   ],
 };

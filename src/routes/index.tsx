@@ -46,7 +46,6 @@ type Step =
   | "behaviours"
   | "focal"
   | "questions"
-  | "evidence"
   | "context"
   | "closecall"
   | "targets"
@@ -271,6 +270,22 @@ function Actions({
 
 
 
+function fallbackCopy(text: string) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+  } catch {
+    /* clipboard unavailable */
+  }
+  document.body.removeChild(ta);
+}
+
 function Index() {
   const [a11y, setA11y] = useState<A11ySettings>(DEFAULT_A11Y);
   const [panelOpen, setPanelOpen] = useState(false);
@@ -297,14 +312,14 @@ function Index() {
   const [focalId, setFocalId] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, AreaId>>({});
   const [qIndex, setQIndex] = useState(0);
-  const [evidence, setEvidence] = useState("");
-  const [notes, setNotes] = useState("");
   const [frequency, setFrequency] = useState<string | null>(null);
   const [who, setWho] = useState<string | null>(null);
   const [chosenArea, setChosenArea] = useState<AreaId | null>(null);
   const [chosenTarget, setChosenTarget] = useState<Target | null>(null);
   const [plannedFocalId, setPlannedFocalId] = useState<string | null>(null);
   const [viaCloseCall, setViaCloseCall] = useState(false);
+  const [openHints, setOpenHints] = useState<number[]>([]);
+  const [copied, setCopied] = useState(false);
 
   const focal = useMemo(
     () => BEHAVIOURS.find((b) => b.id === focalId) ?? null,
@@ -505,7 +520,7 @@ function Index() {
                 disabled={!answers[qIndex]}
                 onClick={() => {
                   if (qIndex + 1 < questionPlan.length) setQIndex(qIndex + 1);
-                  else setStep("evidence");
+                  else setStep("context");
                 }}
               >
                 Continue
@@ -514,44 +529,6 @@ function Index() {
           </>
         )}
 
-
-        {step === "evidence" && focal && (
-          <>
-            <Heading sub={`You said: ${focal.statement} — describe the last time this happened.`}>
-              One example
-            </Heading>
-            <textarea
-              value={evidence}
-              onChange={(e) => setEvidence(e.target.value)}
-              rows={6}
-              className="w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-ring/30"
-              placeholder="What happened, and when?"
-            />
-            <label className="mt-8 block text-sm font-medium text-foreground">
-              Anything else worth noting (optional)
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              className="mt-3 w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-ring/30"
-            />
-            <Actions
-              onBack={() => {
-                setQIndex(Math.max(0, questionPlan.length - 1));
-                setStep("questions");
-              }}
-            >
-              <PrimaryButton
-                inline
-                disabled={evidence.trim().length === 0}
-                onClick={() => setStep("context")}
-              >
-                Continue
-              </PrimaryButton>
-            </Actions>
-          </>
-        )}
 
         {step === "context" && (
           <>
@@ -576,7 +553,12 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <Actions onBack={() => setStep("evidence")}>
+            <Actions
+              onBack={() => {
+                setQIndex(Math.max(0, questionPlan.length - 1));
+                setStep("questions");
+              }}
+            >
               <PrimaryButton inline disabled={!frequency || !who} onClick={finishContext}>
                 Continue
               </PrimaryButton>
@@ -646,13 +628,14 @@ function Index() {
         {step === "reflection" && chosenArea && chosenTarget && (
           <>
             <Heading>Your target</Heading>
+            <div className="bf-print-area">
             <div className="rounded-r-[13px] border-l-2 border-accent bg-accent/8 py-6 pl-6 pr-6">
               <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 {AREAS[chosenArea].name}
               </p>
               <p className="mt-3 text-[1.0625rem] leading-8 text-foreground">{chosenTarget.text}</p>
             </div>
-            <p className="mt-12 text-sm leading-relaxed text-muted-foreground">
+            <p className="bf-no-print mt-12 text-sm leading-relaxed text-muted-foreground">
               Use these questions to start thinking about how you will develop this target. You don't
               need answers straight away — but they're where your action plan begins.
             </p>
@@ -662,10 +645,45 @@ function Index() {
                   <span className="mt-1 shrink-0 text-xs font-medium tabular-nums text-muted-foreground/70">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-[1.0625rem] leading-8 text-foreground">{r}</span>
+                  <div>
+                    <p className="text-[1.0625rem] leading-8 text-foreground">{r}</p>
+                    <button
+                      type="button"
+                      aria-expanded={openHints.includes(i)}
+                      onClick={() =>
+                        setOpenHints((prev) =>
+                          prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i],
+                        )
+                      }
+                      className="bf-no-print mt-1 inline-flex items-center gap-1.5 rounded-[6px] text-xs font-medium text-muted-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    >
+                      Where to look
+                      <span
+                        aria-hidden="true"
+                        className={`text-[0.7rem] transition-transform duration-150 ${openHints.includes(i) ? "rotate-180" : ""}`}
+                      >
+                        ▾
+                      </span>
+                    </button>
+                    <p
+                      className={`mt-2 text-sm leading-7 text-muted-foreground ${openHints.includes(i) ? "" : "bf-hint-hidden"}`}
+                    >
+                      {chosenTarget.hints[i]}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ol>
+            <div className="mt-12 border-t border-border pt-6">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                Where this comes from
+              </p>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                {chosenTarget.pedagogy}
+              </p>
+            </div>
+            </div>
+
             <div className="mt-12 rounded-[13px] border border-border bg-card p-6 sm:p-8">
               <h2 className="bf-display text-lg font-medium text-foreground">What happens next</h2>
               <ol className="mt-6 space-y-8">
@@ -690,6 +708,48 @@ function Index() {
                     >
                       Open the RAISE Target Setting form
                     </a>
+                    <div className="bf-no-print flex flex-wrap gap-3 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => window.print()}
+                        className="inline-flex min-h-11 items-center rounded-[13px] border border-border bg-card px-5 py-3 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      >
+                        Print this page
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const text = [
+                            AREAS[chosenArea].name,
+                            "",
+                            chosenTarget.text,
+                            "",
+                            ...chosenTarget.reflections.map((r, i) => `${i + 1}. ${r}`),
+                            "",
+                            chosenTarget.pedagogy,
+                          ].join("\n");
+                          const done = () => {
+                            setCopied(true);
+                            window.setTimeout(() => setCopied(false), 2000);
+                          };
+                          if (navigator.clipboard?.writeText) {
+                            navigator.clipboard.writeText(text).then(done).catch(() => {
+                              fallbackCopy(text);
+                              done();
+                            });
+                          } else {
+                            fallbackCopy(text);
+                            done();
+                          }
+                        }}
+                        className="inline-flex min-h-11 items-center rounded-[13px] border border-border bg-card px-5 py-3 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      >
+                        {copied ? "Copied" : "Copy target"}
+                      </button>
+                      <span aria-live="polite" className="sr-only">
+                        {copied ? "Copied to clipboard" : ""}
+                      </span>
+                    </div>
                   </div>
                 </li>
                 <li className="flex gap-5">
