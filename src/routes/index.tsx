@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import logoAsset from "@/assets/bradford-college-logo.jpg.asset.json";
 import {
   AccessibilityIcon,
@@ -58,7 +58,39 @@ const WHO = [
   "Most of the group at once",
 ];
 
-function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
+function SiteHeader({
+  onOpenPanel,
+  onStartAgain,
+  showStartAgain,
+}: {
+  onOpenPanel: () => void;
+  onStartAgain?: (() => void) | undefined;
+  showStartAgain?: boolean | undefined;
+}) {
+  const [confirming, setConfirming] = useState(false);
+  const wrapRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!confirming) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setConfirming(false);
+    };
+    const onDown = (e: MouseEvent) => {
+      if (wrapRef.current?.contains(e.target as Node)) return;
+      setConfirming(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [confirming]);
+
+  useEffect(() => {
+    if (!showStartAgain) setConfirming(false);
+  }, [showStartAgain]);
+
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-8">
@@ -68,14 +100,40 @@ function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
           className="bf-invert-on-dark h-[1.35em] w-auto max-w-[150px] shrink-0 object-contain object-left"
         />
 
-        <button
-          type="button"
-          onClick={onOpenPanel}
-          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          <AccessibilityIcon className="h-5 w-5" />
-          <span>Accessibility</span>
-        </button>
+        <div className="flex shrink-0 items-center gap-3">
+          {showStartAgain ? (
+            <span ref={wrapRef} className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirming(true)}
+                className="rounded-[8px] px-1 py-2 text-[0.8125rem] font-normal text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                {confirming ? "Start again?" : "Start again"}
+              </button>
+              {confirming ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfirming(false);
+                    onStartAgain?.();
+                  }}
+                  className="rounded-[8px] px-1 py-2 text-[0.8125rem] font-semibold text-accent underline underline-offset-4 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  Yes
+                </button>
+              ) : null}
+            </span>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={onOpenPanel}
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <AccessibilityIcon className="h-5 w-5" />
+            <span>Accessibility</span>
+          </button>
+        </div>
       </div>
     </header>
   );
@@ -85,14 +143,22 @@ function Shell({
   children,
   wide,
   onOpenPanel,
+  onStartAgain,
+  showStartAgain,
 }: {
   children: React.ReactNode;
   wide?: boolean;
   onOpenPanel: () => void;
+  onStartAgain?: (() => void) | undefined;
+  showStartAgain?: boolean | undefined;
 }) {
   return (
     <div className="relative min-h-dvh bg-background">
-      <SiteHeader onOpenPanel={onOpenPanel} />
+      <SiteHeader
+        onOpenPanel={onOpenPanel}
+        onStartAgain={onStartAgain}
+        showStartAgain={showStartAgain}
+      />
       <main className="relative min-h-dvh overflow-hidden px-5 pb-24 pt-[7.5rem] sm:px-8 sm:pt-[8.5rem]">
         <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
         <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
@@ -322,6 +388,23 @@ function Index() {
   const [pedagogyOpen, setPedagogyOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const startAgain = () => {
+    setStep("welcome");
+    setSelected([]);
+    setFocalId(null);
+    setPlannedFocalId(null);
+    setAnswers({});
+    setQIndex(0);
+    setFrequency(null);
+    setWho(null);
+    setChosenArea(null);
+    setChosenTarget(null);
+    setViaCloseCall(false);
+    setOpenHints([]);
+    setPedagogyOpen(false);
+    setCopied(false);
+  };
+
   const focal = useMemo(
     () => BEHAVIOURS.find((b) => b.id === focalId) ?? null,
     [focalId],
@@ -407,7 +490,12 @@ function Index() {
         settings={a11y}
         onChange={setA11y}
       />
-      <Shell wide={step === "targets"} onOpenPanel={() => setPanelOpen(true)}>
+      <Shell
+        wide={step === "targets"}
+        onOpenPanel={() => setPanelOpen(true)}
+        onStartAgain={startAgain}
+        showStartAgain={step !== "welcome"}
+      >
       <div key={key} className="bf-step">
 
         {step === "welcome" && (
@@ -420,8 +508,8 @@ function Index() {
                 This activity helps you find the area your RAISE target should sit in.
               </p>
               <p>
-                You'll answer a few questions about what you notice in one group you teach. It takes
-                about five minutes.
+                You'll choose what you're seeing in one group you teach, answer six short questions
+                about it, then pick a target. It takes about five minutes.
               </p>
               <p>
                 At the end you'll get a suggested target to take into the RAISE Target Setting form.
@@ -507,7 +595,11 @@ function Index() {
         {step === "questions" && questionPlan[qIndex] && (
           <>
             <ProgressBar current={qIndex + 1} total={questionPlan.length} />
-            <Heading>{questionPlan[qIndex].q.stem}</Heading>
+            <header className="mb-9">
+              <h1 className="bf-display text-balance text-[1.4rem] leading-[1.28] text-foreground sm:text-[1.6rem]">
+                {questionPlan[qIndex].q.stem}
+              </h1>
+            </header>
 
             <div className="space-y-3">
               {questionPlan[qIndex].q.options.map((o) => (
