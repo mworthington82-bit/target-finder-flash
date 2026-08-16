@@ -105,11 +105,11 @@ export const BEHAVIOURS: Behaviour[] = [
         ],
       },
       {
-        stem: "When learners first see a task, the next level of thinking is…",
+        stem: "Once the core task is done, learners typically…",
         options: [
-          { text: "not visible until you check their work", area: "AREA6" },
-          { text: "there but easy to avoid after the core task", area: "AREA2" },
-          { text: "hard for some learners to access without someone beside them", area: "AREA4" },
+          { text: "stop, because nothing shows them what deeper would look like", area: "AREA6" },
+          { text: "could go further but have no reason to", area: "AREA2" },
+          { text: "need someone alongside them to attempt anything harder", area: "AREA4" },
         ],
       },
     ],
@@ -237,7 +237,7 @@ export const BEHAVIOURS: Behaviour[] = [
     priors: ["AREA5","AREA4"],
     questions: [
       {
-        stem: "Think of the last time learners had to begin a task. Before writing, they…",
+        stem: "Think of the last time learners had to begin a task. Before starting, they…",
         options: [
           { text: "asked whether their first step was right", area: "AREA5" },
           { text: "waited for a support sheet to be explained again", area: "AREA4" },
@@ -339,11 +339,11 @@ export const BEHAVIOURS: Behaviour[] = [
         ],
       },
       {
-        stem: "During transitions, the task learners move into is…",
+        stem: "At the moment one task ends, learners…",
         options: [
-          { text: "not ready or visible when the previous task ends", area: "AREA3" },
-          { text: "too easily completed without further reasoning", area: "AREA2" },
-          { text: "unclear enough that learners wait to be checked", area: "AREA6" },
+          { text: "have nothing in front of them to move on to", area: "AREA3" },
+          { text: "move to something they can finish without thinking", area: "AREA2" },
+          { text: "wait to be told whether the last thing was right", area: "AREA6" },
         ],
       },
     ],
@@ -358,7 +358,7 @@ export const BEHAVIOURS: Behaviour[] = [
         options: [
           { text: "waited for you to announce what to do", area: "AREA3" },
           { text: "settled without revisiting anything from the previous session", area: "AREA1" },
-          { text: "asked others what they had missed", area: "AREA6" },
+          { text: "checked with each other about what they were meant to be doing", area: "AREA6" },
         ],
       },
       {
@@ -366,15 +366,15 @@ export const BEHAVIOURS: Behaviour[] = [
         options: [
           { text: "loses the first minutes while they get oriented", area: "AREA3" },
           { text: "moves on without a route into earlier learning", area: "AREA1" },
-          { text: "cannot show quickly what late learners have understood", area: "AREA6" },
+          { text: "gives you no quick way to see where they are", area: "AREA6" },
         ],
       },
       {
-        stem: "At the start of a session, the opening activity is most often…",
+        stem: "In the first five minutes, most learners are…",
         options: [
-          { text: "unclear until everyone is settled", area: "AREA3" },
-          { text: "new work rather than a chance to reconnect prior learning", area: "AREA1" },
-          { text: "something you cannot quickly read across the group", area: "AREA6" },
+          { text: "waiting to be told what to do", area: "AREA3" },
+          { text: "starting new content without touching anything from last time", area: "AREA1" },
+          { text: "working, but in ways you cannot quickly read across the group", area: "AREA6" },
         ],
       },
       {
