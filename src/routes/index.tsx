@@ -632,12 +632,11 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
-              <BackButton onClick={() => setStep(viaCloseCall ? "closecall" : "context")} />
+            <Actions onBack={() => setStep(viaCloseCall ? "closecall" : "context")}>
               <PrimaryButton inline disabled={!targetIsInArea} onClick={() => setStep("reflection")}>
                 {targetIsInArea ? "Continue with this target" : "Continue"}
               </PrimaryButton>
-            </div>
+            </Actions>
           </>
         )}
 
