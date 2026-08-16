@@ -143,14 +143,22 @@ function Shell({
   children,
   wide,
   onOpenPanel,
+  onStartAgain,
+  showStartAgain,
 }: {
   children: React.ReactNode;
   wide?: boolean;
   onOpenPanel: () => void;
+  onStartAgain?: () => void;
+  showStartAgain?: boolean;
 }) {
   return (
     <div className="relative min-h-dvh bg-background">
-      <SiteHeader onOpenPanel={onOpenPanel} />
+      <SiteHeader
+        onOpenPanel={onOpenPanel}
+        onStartAgain={onStartAgain}
+        showStartAgain={showStartAgain}
+      />
       <main className="relative min-h-dvh overflow-hidden px-5 pb-24 pt-[7.5rem] sm:px-8 sm:pt-[8.5rem]">
         <div className="bf-glow pointer-events-none absolute inset-x-0 top-0 h-[420px]" aria-hidden="true" />
         <div className={`relative mx-auto w-full ${wide ? "max-w-3xl" : "max-w-[720px]"}`}>{children}</div>
