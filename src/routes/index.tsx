@@ -388,6 +388,23 @@ function Index() {
   const [pedagogyOpen, setPedagogyOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const startAgain = () => {
+    setStep("welcome");
+    setSelected([]);
+    setFocalId(null);
+    setPlannedFocalId(null);
+    setAnswers({});
+    setQIndex(0);
+    setFrequency(null);
+    setWho(null);
+    setChosenArea(null);
+    setChosenTarget(null);
+    setViaCloseCall(false);
+    setOpenHints([]);
+    setPedagogyOpen(false);
+    setCopied(false);
+  };
+
   const focal = useMemo(
     () => BEHAVIOURS.find((b) => b.id === focalId) ?? null,
     [focalId],
@@ -473,7 +490,12 @@ function Index() {
         settings={a11y}
         onChange={setA11y}
       />
-      <Shell wide={step === "targets"} onOpenPanel={() => setPanelOpen(true)}>
+      <Shell
+        wide={step === "targets"}
+        onOpenPanel={() => setPanelOpen(true)}
+        onStartAgain={startAgain}
+        showStartAgain={step !== "welcome"}
+      >
       <div key={key} className="bf-step">
 
         {step === "welcome" && (
@@ -486,8 +508,8 @@ function Index() {
                 This activity helps you find the area your RAISE target should sit in.
               </p>
               <p>
-                You'll answer a few questions about what you notice in one group you teach. It takes
-                about five minutes.
+                You'll choose what you're seeing in one group you teach, answer six short questions
+                about it, then pick a target. It takes about five minutes.
               </p>
               <p>
                 At the end you'll get a suggested target to take into the RAISE Target Setting form.
@@ -573,7 +595,11 @@ function Index() {
         {step === "questions" && questionPlan[qIndex] && (
           <>
             <ProgressBar current={qIndex + 1} total={questionPlan.length} />
-            <Heading>{questionPlan[qIndex].q.stem}</Heading>
+            <header className="mb-9">
+              <h1 className="bf-display text-balance text-[1.4rem] leading-[1.28] text-foreground sm:text-[1.6rem]">
+                {questionPlan[qIndex].q.stem}
+              </h1>
+            </header>
 
             <div className="space-y-3">
               {questionPlan[qIndex].q.options.map((o) => (
