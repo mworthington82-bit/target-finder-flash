@@ -570,7 +570,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Where in the session would that connection best land?",
       ],
       hints: [
-        "Say your answer out loud. Time it. Under twenty seconds?",
+        "Say it out loud to an empty room. Would a learner follow it?",
         "Put last term's task next to this week's. Name the link.",
         "Walk through your session. Mark the minute you would say it.",
       ],
@@ -586,7 +586,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       ],
       hints: [
         "Look back at your last three lessons. When did you last check?",
-        "Take last term's marks. Find the week the drop appeared.",
+        "Look at the last work you assessed. Find the week the drop appeared.",
         "Name the week one task that would have shown you.",
       ],
       pedagogy: "Diagnostic assessment — short checks placed before teaching rather than after, so gaps show while there is still time.",
@@ -604,7 +604,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       hints: [
         "Pull two pieces of learner work. Put them side by side.",
         "Watch one learner finish. What do they do next?",
-        "Read this week's tasks. Count how many need a because.",
+        "Read this week's tasks. How many can be finished without explaining anything?",
       ],
       pedagogy: "Bloom's revised taxonomy — the difference between recalling an answer and analysing, evaluating or creating with it.",
     },
@@ -619,7 +619,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       hints: [
         "Count your questions in ten minutes. How many were follow-ups?",
         "Take your register. Name three you never hear explain.",
-        "Say one aloud yourself. Write down the words you used.",
+        "Answer your own question out loud, properly. Write down what you said.",
       ],
       pedagogy: "Alexander's dialogic teaching — learning deepens when classroom talk goes past single answers into extended reasoning.",
     },
@@ -632,7 +632,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would make depth the obvious next move rather than an optional extra?",
       ],
       hints: [
-        "Look at the worksheet. Is the harder part visible on page one?",
+        "Look at the task as they first see it. Is the harder part visible?",
         "Picture your fastest learner at minute twenty. Where are they?",
         "Read your task wording. Where does it say stop?",
       ],
@@ -664,7 +664,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would have to be true for the first five minutes to run without you?",
       ],
       hints: [
-        "Stand at the door of your empty room. What can they see?",
+        "Watch where learners enter. What can they see first?",
         "Count the changeovers in one session. Time the longest.",
         "Picture yourself arriving late. What would they start?",
       ],
@@ -711,8 +711,8 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "How would you know a learner no longer needed it?",
       ],
       hints: [
-        "Look at your walls and handouts. Note what has not changed.",
-        "Pick one prompt sheet. Picture the lesson without it.",
+        "Look at what's on display and in their hands. What hasn't changed since September?",
+        "Name one support they use. Picture the session without it.",
         "Name one learner who never looks at it any more.",
       ],
       pedagogy: "Wood, Bruner and Ross on scaffolding — support is meant to be temporary and removed as competence grows.",
@@ -744,7 +744,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       ],
       hints: [
         "Listen next session. Write down their exact words.",
-        "Look at the desk. What is there to check against?",
+        "Sit where a learner sits. What could tell them they are right?",
         "Watch one learner's first move. Where do they pause?",
       ],
       pedagogy: "Rosenshine's Principles of Instruction — the case for modelling first, then withdrawing support in planned steps.",
@@ -758,7 +758,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would regular return look like in your scheme of work?",
       ],
       hints: [
-        "Read your scheme of work. Find a topic taught only once.",
+        "Look at your unit plan. Find something covered once and never returned to.",
         "Name the idea. Count the weeks it appears.",
         "Look at next month's plan. Mark where it could come back.",
       ],
@@ -774,7 +774,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       ],
       hints: [
         "Watch a stuck learner for a minute. What do they reach for?",
-        "Look at your last marked set. Count the corrections in your pen.",
+        "Look at the last work you assessed. How much of the correcting was yours?",
         "Pick one common error. Name how it shows itself.",
       ],
       pedagogy: "Ericsson's deliberate practice — skill grows when learners work on precise weaknesses and correct their own errors.",
@@ -822,7 +822,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       hints: [
         "Take your last assessment. Note the week that topic was taught.",
         "Pick one topic. Name the lesson where a wrong idea takes hold.",
-        "Picture minute ten. What is on the board then?",
+        "Picture minute ten of your next session. What are learners doing?",
       ],
       pedagogy: "Dylan Wiliam's hinge questions — one well-placed question mid-lesson shows whether to move on or reteach.",
     },
