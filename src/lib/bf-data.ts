@@ -30,6 +30,7 @@ export interface Target {
   reflections: string[];
   hints: string[];
   pedagogy: string;
+  walkthru?: string | null;
 }
 
 export const TIE_ORDER: AreaId[] = ["AREA6", "AREA2", "AREA5", "AREA4", "AREA1", "AREA3"];
@@ -560,6 +561,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Picture six learners stuck at task one. What are they doing?",
       ],
       pedagogy: "Rosenshine's Principles of Instruction — the case for beginning every lesson with a short review of earlier learning.",
+      walkthru: null,
     },
     {
       id: "A1T2",
@@ -575,6 +577,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Walk through your session. Mark the minute you would say it.",
       ],
       pedagogy: "Ausubel's meaningful learning — new ideas stick when learners can hook them onto what they already know.",
+      walkthru: null,
     },
     {
       id: "A1T3",
@@ -590,6 +593,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Name the week one task. What would it have revealed?",
       ],
       pedagogy: "Diagnostic assessment — short checks placed before teaching rather than after, so gaps show while there is still time.",
+      walkthru: null,
     },
   ],
   AREA2: [
@@ -607,6 +611,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Read this week's tasks. How many can be finished without explaining anything?",
       ],
       pedagogy: "Bloom's revised taxonomy — the difference between recalling an answer and analysing, evaluating or creating with it.",
+      walkthru: null,
     },
     {
       id: "A2T2",
@@ -622,6 +627,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Answer your own question out loud, properly. Write down what you said.",
       ],
       pedagogy: "Alexander's dialogic teaching — learning deepens when classroom talk goes past single answers into extended reasoning.",
+      walkthru: null,
     },
     {
       id: "A2T3",
@@ -637,6 +643,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Read your task wording. Where does it say stop?",
       ],
       pedagogy: "Vygotsky's zone of proximal development — learners grow most on work just beyond what they can already do alone.",
+      walkthru: null,
     },
   ],
   AREA3: [
@@ -654,6 +661,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Watch when drift starts. What is missing from that task?",
       ],
       pedagogy: "Tom Bennett's Creating a Culture — behaviour improves when routines are taught deliberately rather than assumed.",
+      walkthru: null,
     },
     {
       id: "A3T2",
@@ -669,6 +677,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Picture yourself arriving late. What would they start?",
       ],
       pedagogy: "Doug Lemov's Teach Like a Champion — routines such as a Do Now put learners to work the moment they arrive.",
+      walkthru: null,
     },
     {
       id: "A3T3",
@@ -684,6 +693,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Watch the clock during independent work. Note the minute it slips.",
       ],
       pedagogy: "Sweller's cognitive load theory — attention holds when a task is clear and does not overload working memory.",
+      walkthru: null,
     },
   ],
   AREA4: [
@@ -701,6 +711,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Sit in their chair. Look at what is in front of you.",
       ],
       pedagogy: "The EEF's SEND in Mainstream Schools guidance — strong teaching for everyone comes before individual adult support.",
+      walkthru: null,
     },
     {
       id: "A4T2",
@@ -716,6 +727,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Name one learner who never looks at it any more.",
       ],
       pedagogy: "Wood, Bruner and Ross on scaffolding — support is meant to be temporary and removed as competence grows.",
+      walkthru: null,
     },
     {
       id: "A4T3",
@@ -731,6 +743,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Count how many learners you saw real evidence from last session.",
       ],
       pedagogy: "Dylan Wiliam's Embedding Formative Assessment — all-learner response methods make quiet learners' thinking visible.",
+      walkthru: null,
     },
   ],
   AREA5: [
@@ -748,6 +761,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Watch one learner's first move. Where do they pause?",
       ],
       pedagogy: "Rosenshine's Principles of Instruction — the case for modelling first, then withdrawing support in planned steps.",
+      walkthru: null,
     },
     {
       id: "A5T2",
@@ -763,6 +777,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Look at next month's plan. Where could it return without squeezing something out?",
       ],
       pedagogy: "Ebbinghaus's forgetting curve and spaced practice — knowledge fades unless it is deliberately revisited over time.",
+      walkthru: null,
     },
     {
       id: "A5T3",
@@ -778,6 +793,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Name one common error. What do learners do right before it appears?",
       ],
       pedagogy: "Ericsson's deliberate practice — skill grows when learners work on precise weaknesses and correct their own errors.",
+      walkthru: null,
     },
   ],
   AREA6: [
@@ -795,6 +811,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Look at your last check. What did you do in the ten minutes after?",
       ],
       pedagogy: "Black and Wiliam's Inside the Black Box — checking understanding during a lesson lifts results more than marking after it.",
+      walkthru: null,
     },
     {
       id: "A6T2",
@@ -810,6 +827,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Walk through your session. Mark the minutes set aside for it.",
       ],
       pedagogy: "Hattie and Timperley's model of feedback — feedback only works when learners are given time to act on it.",
+      walkthru: null,
     },
     {
       id: "A6T3",
@@ -825,6 +843,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Picture minute ten of your next session. What are learners doing?",
       ],
       pedagogy: "Dylan Wiliam's hinge questions — one well-placed question mid-lesson shows whether to move on or reteach.",
+      walkthru: null,
     },
   ],
 };

@@ -319,6 +319,7 @@ function Index() {
   const [plannedFocalId, setPlannedFocalId] = useState<string | null>(null);
   const [viaCloseCall, setViaCloseCall] = useState(false);
   const [openHints, setOpenHints] = useState<number[]>([]);
+  const [pedagogyOpen, setPedagogyOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const focal = useMemo(
@@ -689,13 +690,38 @@ function Index() {
                 </li>
               ))}
             </ol>
-            <div className="mt-12 border-t border-border pt-6">
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                Where this comes from
-              </p>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                {chosenTarget.pedagogy}
-              </p>
+            <div className="mt-12 space-y-6 border-t border-border pt-6">
+              {chosenTarget.walkthru ? (
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                    Try this
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    {chosenTarget.walkthru}
+                  </p>
+                </div>
+              ) : null}
+              <div>
+                <button
+                  type="button"
+                  aria-expanded={pedagogyOpen}
+                  onClick={() => setPedagogyOpen((prev) => !prev)}
+                  className="bf-no-print inline-flex items-center gap-1.5 rounded-[6px] text-xs font-medium text-muted-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  Read more on this
+                  <span
+                    aria-hidden="true"
+                    className={`text-[0.7rem] transition-transform duration-150 ${pedagogyOpen ? "rotate-180" : ""}`}
+                  >
+                    ▾
+                  </span>
+                </button>
+                <p
+                  className={`text-sm leading-7 text-muted-foreground ${pedagogyOpen ? "mt-3 border-l-2 border-accent pl-4" : "bf-hint-hidden"}`}
+                >
+                  {chosenTarget.pedagogy}
+                </p>
+              </div>
             </div>
             </div>
 
@@ -738,6 +764,7 @@ function Index() {
                             "",
                             ...chosenTarget.reflections.map((r, i) => `${i + 1}. ${r}`),
                             "",
+                            ...(chosenTarget.walkthru ? [chosenTarget.walkthru, ""] : []),
                             chosenTarget.pedagogy,
                           ].join("\n");
                           const done = () => {
