@@ -64,8 +64,8 @@ function SiteHeader({
   showStartAgain,
 }: {
   onOpenPanel: () => void;
-  onStartAgain?: () => void;
-  showStartAgain?: boolean;
+  onStartAgain?: (() => void) | undefined;
+  showStartAgain?: boolean | undefined;
 }) {
   const [confirming, setConfirming] = useState(false);
 
@@ -149,8 +149,8 @@ function Shell({
   children: React.ReactNode;
   wide?: boolean;
   onOpenPanel: () => void;
-  onStartAgain?: () => void;
-  showStartAgain?: boolean;
+  onStartAgain?: (() => void) | undefined;
+  showStartAgain?: boolean | undefined;
 }) {
   return (
     <div className="relative min-h-dvh bg-background">
