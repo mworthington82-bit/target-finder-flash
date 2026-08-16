@@ -672,7 +672,7 @@ function Index() {
                       }
                       className="bf-no-print mt-1 inline-flex items-center gap-1.5 rounded-[6px] text-xs font-medium text-muted-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     >
-                      Where to look
+                      A way in
                       <span
                         aria-hidden="true"
                         className={`text-[0.7rem] transition-transform duration-150 ${openHints.includes(i) ? "rotate-180" : ""}`}

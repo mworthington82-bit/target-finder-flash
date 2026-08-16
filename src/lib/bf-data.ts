@@ -585,9 +585,9 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would you do differently if you knew in week one rather than week six?",
       ],
       hints: [
-        "Look back at your last three lessons. When did you last check?",
+        "Look back at your last three lessons. When did a gap last pass unchecked?",
         "Look at the last work you assessed. Find the week the drop appeared.",
-        "Name the week one task that would have shown you.",
+        "Name the week one task. What would it have revealed?",
       ],
       pedagogy: "Diagnostic assessment — short checks placed before teaching rather than after, so gaps show while there is still time.",
     },
@@ -651,7 +651,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       hints: [
         "Walk through your last session minute by minute. Where does nothing happen?",
         "Picture the doorway. What do the first three through it do?",
-        "Note the clock time drift starts. Look at that task.",
+        "Watch when drift starts. What is missing from that task?",
       ],
       pedagogy: "Tom Bennett's Creating a Culture — behaviour improves when routines are taught deliberately rather than assumed.",
     },
@@ -665,7 +665,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       ],
       hints: [
         "Watch where learners enter. What can they see first?",
-        "Count the changeovers in one session. Time the longest.",
+        "Count the changeovers in one session. Which one costs the most?",
         "Picture yourself arriving late. What would they start?",
       ],
       pedagogy: "Doug Lemov's Teach Like a Champion — routines such as a Do Now put learners to work the moment they arrive.",
@@ -679,7 +679,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "Where in that stretch does attention usually go?",
       ],
       hints: [
-        "Time it next session. Write the number down.",
+        "Time your longest stretch of independent work. What happens just before it breaks?",
         "Ask three learners when you last read their work.",
         "Watch the clock during independent work. Note the minute it slips.",
       ],
@@ -743,7 +743,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would they need to be sure of to begin alone?",
       ],
       hints: [
-        "Listen next session. Write down their exact words.",
+        "Listen next session. What question are their exact words really asking?",
         "Sit where a learner sits. What could tell them they are right?",
         "Watch one learner's first move. Where do they pause?",
       ],
@@ -759,8 +759,8 @@ export const TARGETS: Record<AreaId, Target[]> = {
       ],
       hints: [
         "Look at your unit plan. Find something covered once and never returned to.",
-        "Name the idea. Count the weeks it appears.",
-        "Look at next month's plan. Mark where it could come back.",
+        "Name the idea. How many weeks pass before it appears again?",
+        "Look at next month's plan. Where could it return without squeezing something out?",
       ],
       pedagogy: "Ebbinghaus's forgetting curve and spaced practice — knowledge fades unless it is deliberately revisited over time.",
     },
@@ -775,7 +775,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       hints: [
         "Watch a stuck learner for a minute. What do they reach for?",
         "Look at the last work you assessed. How much of the correcting was yours?",
-        "Pick one common error. Name how it shows itself.",
+        "Name one common error. What do learners do right before it appears?",
       ],
       pedagogy: "Ericsson's deliberate practice — skill grows when learners work on precise weaknesses and correct their own errors.",
     },
@@ -792,7 +792,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
       hints: [
         "Take your register. Tick who you actually heard from last lesson.",
         "Look at next lesson's objective. Name the one idea it rests on.",
-        "Recall your last check. Say what you did in the ten minutes after.",
+        "Look at your last check. What did you do in the ten minutes after?",
       ],
       pedagogy: "Black and Wiliam's Inside the Black Box — checking understanding during a lesson lifts results more than marking after it.",
     },
@@ -820,7 +820,7 @@ export const TARGETS: Record<AreaId, Target[]> = {
         "What would you change on the spot if you knew at minute ten?",
       ],
       hints: [
-        "Take your last assessment. Note the week that topic was taught.",
+        "Look at your last assessment. How many weeks passed before it was tested?",
         "Pick one topic. Name the lesson where a wrong idea takes hold.",
         "Picture minute ten of your next session. What are learners doing?",
       ],
