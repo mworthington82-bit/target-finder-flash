@@ -46,7 +46,6 @@ type Step =
   | "behaviours"
   | "focal"
   | "questions"
-  | "evidence"
   | "context"
   | "closecall"
   | "targets"
@@ -297,8 +296,6 @@ function Index() {
   const [focalId, setFocalId] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, AreaId>>({});
   const [qIndex, setQIndex] = useState(0);
-  const [evidence, setEvidence] = useState("");
-  const [notes, setNotes] = useState("");
   const [frequency, setFrequency] = useState<string | null>(null);
   const [who, setWho] = useState<string | null>(null);
   const [chosenArea, setChosenArea] = useState<AreaId | null>(null);
@@ -505,7 +502,7 @@ function Index() {
                 disabled={!answers[qIndex]}
                 onClick={() => {
                   if (qIndex + 1 < questionPlan.length) setQIndex(qIndex + 1);
-                  else setStep("evidence");
+                  else setStep("context");
                 }}
               >
                 Continue
@@ -514,44 +511,6 @@ function Index() {
           </>
         )}
 
-
-        {step === "evidence" && focal && (
-          <>
-            <Heading sub={`You said: ${focal.statement} — describe the last time this happened.`}>
-              One example
-            </Heading>
-            <textarea
-              value={evidence}
-              onChange={(e) => setEvidence(e.target.value)}
-              rows={6}
-              className="w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-ring/30"
-              placeholder="What happened, and when?"
-            />
-            <label className="mt-8 block text-sm font-medium text-foreground">
-              Anything else worth noting (optional)
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              className="mt-3 w-full rounded-[13px] border border-border bg-card p-5 text-[0.95rem] leading-relaxed text-foreground outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-ring/30"
-            />
-            <Actions
-              onBack={() => {
-                setQIndex(Math.max(0, questionPlan.length - 1));
-                setStep("questions");
-              }}
-            >
-              <PrimaryButton
-                inline
-                disabled={evidence.trim().length === 0}
-                onClick={() => setStep("context")}
-              >
-                Continue
-              </PrimaryButton>
-            </Actions>
-          </>
-        )}
 
         {step === "context" && (
           <>
@@ -576,7 +535,12 @@ function Index() {
                 </Card>
               ))}
             </div>
-            <Actions onBack={() => setStep("evidence")}>
+            <Actions
+              onBack={() => {
+                setQIndex(Math.max(0, questionPlan.length - 1));
+                setStep("questions");
+              }}
+            >
               <PrimaryButton inline disabled={!frequency || !who} onClick={finishContext}>
                 Continue
               </PrimaryButton>
