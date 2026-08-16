@@ -58,7 +58,35 @@ const WHO = [
   "Most of the group at once",
 ];
 
-function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
+function SiteHeader({
+  onOpenPanel,
+  onStartAgain,
+  showStartAgain,
+}: {
+  onOpenPanel: () => void;
+  onStartAgain?: () => void;
+  showStartAgain?: boolean;
+}) {
+  const [confirming, setConfirming] = useState(false);
+
+  useEffect(() => {
+    if (!confirming) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setConfirming(false);
+    };
+    const onDown = () => setConfirming(false);
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onDown);
+    };
+  }, [confirming]);
+
+  useEffect(() => {
+    if (!showStartAgain) setConfirming(false);
+  }, [showStartAgain]);
+
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-8">
@@ -68,14 +96,44 @@ function SiteHeader({ onOpenPanel }: { onOpenPanel: () => void }) {
           className="bf-invert-on-dark h-[1.35em] w-auto max-w-[150px] shrink-0 object-contain object-left"
         />
 
-        <button
-          type="button"
-          onClick={onOpenPanel}
-          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          <AccessibilityIcon className="h-5 w-5" />
-          <span>Accessibility</span>
-        </button>
+        <div className="flex shrink-0 items-center gap-3">
+          {showStartAgain ? (
+            <span
+              className="flex items-center gap-2"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setConfirming(true)}
+                className="rounded-[8px] px-1 py-2 text-[0.8125rem] font-normal text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                aria-label={confirming ? "Start again?" : "Start again"}
+              >
+                {confirming ? "Start again?" : "Start again"}
+              </button>
+              {confirming ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfirming(false);
+                    onStartAgain?.();
+                  }}
+                  className="rounded-[8px] px-1 py-2 text-[0.8125rem] font-semibold text-accent underline underline-offset-4 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  Yes
+                </button>
+              ) : null}
+            </span>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={onOpenPanel}
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[12px] border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <AccessibilityIcon className="h-5 w-5" />
+            <span>Accessibility</span>
+          </button>
+        </div>
       </div>
     </header>
   );
