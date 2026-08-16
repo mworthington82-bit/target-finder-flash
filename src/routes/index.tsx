@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import logoAsset from "@/assets/bradford-college-logo.jpg.asset.json";
 import {
   AccessibilityIcon,
@@ -68,18 +68,22 @@ function SiteHeader({
   showStartAgain?: boolean | undefined;
 }) {
   const [confirming, setConfirming] = useState(false);
+  const wrapRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (!confirming) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setConfirming(false);
     };
-    const onDown = () => setConfirming(false);
+    const onDown = (e: MouseEvent) => {
+      if (wrapRef.current?.contains(e.target as Node)) return;
+      setConfirming(false);
+    };
     document.addEventListener("keydown", onKey);
-    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("mousedown", onDown);
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("mousedown", onDown);
     };
   }, [confirming]);
 
@@ -98,10 +102,7 @@ function SiteHeader({
 
         <div className="flex shrink-0 items-center gap-3">
           {showStartAgain ? (
-            <span
-              className="flex items-center gap-2"
-              onPointerDown={(e) => e.stopPropagation()}
-            >
+            <span ref={wrapRef} className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setConfirming(true)}
