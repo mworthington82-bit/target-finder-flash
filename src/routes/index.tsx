@@ -610,13 +610,14 @@ function Index() {
         {step === "reflection" && chosenArea && chosenTarget && (
           <>
             <Heading>Your target</Heading>
+            <div className="bf-print-area">
             <div className="rounded-r-[13px] border-l-2 border-accent bg-accent/8 py-6 pl-6 pr-6">
               <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 {AREAS[chosenArea].name}
               </p>
               <p className="mt-3 text-[1.0625rem] leading-8 text-foreground">{chosenTarget.text}</p>
             </div>
-            <p className="mt-12 text-sm leading-relaxed text-muted-foreground">
+            <p className="bf-no-print mt-12 text-sm leading-relaxed text-muted-foreground">
               Use these questions to start thinking about how you will develop this target. You don't
               need answers straight away — but they're where your action plan begins.
             </p>
@@ -626,10 +627,45 @@ function Index() {
                   <span className="mt-1 shrink-0 text-xs font-medium tabular-nums text-muted-foreground/70">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-[1.0625rem] leading-8 text-foreground">{r}</span>
+                  <div>
+                    <p className="text-[1.0625rem] leading-8 text-foreground">{r}</p>
+                    <button
+                      type="button"
+                      aria-expanded={openHints.includes(i)}
+                      onClick={() =>
+                        setOpenHints((prev) =>
+                          prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i],
+                        )
+                      }
+                      className="bf-no-print mt-1 inline-flex items-center gap-1.5 rounded-[6px] text-xs font-medium text-muted-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    >
+                      Where to look
+                      <span
+                        aria-hidden="true"
+                        className={`text-[0.7rem] transition-transform duration-150 ${openHints.includes(i) ? "rotate-180" : ""}`}
+                      >
+                        ▾
+                      </span>
+                    </button>
+                    <p
+                      className={`mt-2 text-sm leading-7 text-muted-foreground ${openHints.includes(i) ? "" : "bf-hint-hidden"}`}
+                    >
+                      {chosenTarget.hints[i]}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ol>
+            <div className="mt-12 border-t border-border pt-6">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                Where this comes from
+              </p>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                {chosenTarget.pedagogy}
+              </p>
+            </div>
+            </div>
+
             <div className="mt-12 rounded-[13px] border border-border bg-card p-6 sm:p-8">
               <h2 className="bf-display text-lg font-medium text-foreground">What happens next</h2>
               <ol className="mt-6 space-y-8">
