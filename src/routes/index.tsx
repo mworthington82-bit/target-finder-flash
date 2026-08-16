@@ -373,10 +373,14 @@ function Index() {
           ? prev
           : [...prev, id],
     );
+    setChosenArea(null);
+    setChosenTarget(null);
+    setViaCloseCall(false);
   }
 
   function finishContext() {
     if (result.margin <= 2) {
+      setChosenArea(null);
       setViaCloseCall(true);
       setStep("closecall");
     } else {
@@ -391,6 +395,9 @@ function Index() {
   const formUrl =
     chosenArea && chosenTarget ? buildFormUrl(AREAS[chosenArea].name, chosenTarget.text) : "";
 
+  const targetIsInArea =
+    chosenArea && chosenTarget ? TARGETS[chosenArea].some((t) => t.id === chosenTarget.id) : false;
+
   return (
     <>
       <AccessibilityPanel
@@ -400,7 +407,7 @@ function Index() {
         onChange={setA11y}
       />
       <Shell wide={step === "targets"} onOpenPanel={() => setPanelOpen(true)}>
-      <div key={key} className="bf-step">
+      <div className="bf-step">
 
         {step === "welcome" && (
           <>
@@ -482,6 +489,9 @@ function Index() {
                   if (focalId !== plannedFocalId) {
                     setAnswers({});
                     setPlannedFocalId(focalId);
+                    setChosenArea(null);
+                    setChosenTarget(null);
+                    setViaCloseCall(false);
                   }
                   setQIndex(0);
                   setStep("questions");
@@ -503,7 +513,12 @@ function Index() {
                 <Card
                   key={o.text}
                   selected={answers[qIndex] === o.area}
-                  onClick={() => setAnswers((prev) => ({ ...prev, [qIndex]: o.area }))}
+                  onClick={() => {
+                    setAnswers((prev) => ({ ...prev, [qIndex]: o.area }));
+                    setChosenArea(null);
+                    setChosenTarget(null);
+                    setViaCloseCall(false);
+                  }}
                 >
                   {o.text}
                 </Card>
@@ -610,7 +625,7 @@ function Index() {
               {TARGETS[chosenArea].map((t) => (
                 <Card
                   key={t.id}
-                  selected={chosenTarget?.id === t.id}
+                  selected={chosenTarget?.id === t.id && targetIsInArea}
                   onClick={() => setChosenTarget(t)}
                 >
                   {t.text}
@@ -618,8 +633,8 @@ function Index() {
               ))}
             </div>
             <Actions onBack={() => setStep(viaCloseCall ? "closecall" : "context")}>
-              <PrimaryButton inline disabled={!chosenTarget} onClick={() => setStep("reflection")}>
-                {chosenTarget ? "Continue with this target" : "Continue"}
+              <PrimaryButton inline disabled={!targetIsInArea} onClick={() => setStep("reflection")}>
+                {targetIsInArea ? "Continue with this target" : "Continue"}
               </PrimaryButton>
             </Actions>
           </>
@@ -698,9 +713,6 @@ function Index() {
                       to add your name and department.
                     </p>
                     <a
-                      ref={(el) => {
-                        if (el) console.log("[Behaviour First] form URL:", el.getAttribute("href"));
-                      }}
                       href={formUrl}
                       target="_blank"
                       rel="noopener noreferrer"
