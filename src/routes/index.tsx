@@ -270,6 +270,22 @@ function Actions({
 
 
 
+function fallbackCopy(text: string) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+  } catch {
+    /* clipboard unavailable */
+  }
+  document.body.removeChild(ta);
+}
+
 function Index() {
   const [a11y, setA11y] = useState<A11ySettings>(DEFAULT_A11Y);
   const [panelOpen, setPanelOpen] = useState(false);
@@ -302,6 +318,8 @@ function Index() {
   const [chosenTarget, setChosenTarget] = useState<Target | null>(null);
   const [plannedFocalId, setPlannedFocalId] = useState<string | null>(null);
   const [viaCloseCall, setViaCloseCall] = useState(false);
+  const [openHints, setOpenHints] = useState<number[]>([]);
+  const [copied, setCopied] = useState(false);
 
   const focal = useMemo(
     () => BEHAVIOURS.find((b) => b.id === focalId) ?? null,
@@ -690,6 +708,48 @@ function Index() {
                     >
                       Open the RAISE Target Setting form
                     </a>
+                    <div className="bf-no-print flex flex-wrap gap-3 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => window.print()}
+                        className="inline-flex min-h-11 items-center rounded-[13px] border border-border bg-card px-5 py-3 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      >
+                        Print this page
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const text = [
+                            AREAS[chosenArea].name,
+                            "",
+                            chosenTarget.text,
+                            "",
+                            ...chosenTarget.reflections.map((r, i) => `${i + 1}. ${r}`),
+                            "",
+                            chosenTarget.pedagogy,
+                          ].join("\n");
+                          const done = () => {
+                            setCopied(true);
+                            window.setTimeout(() => setCopied(false), 2000);
+                          };
+                          if (navigator.clipboard?.writeText) {
+                            navigator.clipboard.writeText(text).then(done).catch(() => {
+                              fallbackCopy(text);
+                              done();
+                            });
+                          } else {
+                            fallbackCopy(text);
+                            done();
+                          }
+                        }}
+                        className="inline-flex min-h-11 items-center rounded-[13px] border border-border bg-card px-5 py-3 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      >
+                        {copied ? "Copied" : "Copy target"}
+                      </button>
+                      <span aria-live="polite" className="sr-only">
+                        {copied ? "Copied to clipboard" : ""}
+                      </span>
+                    </div>
                   </div>
                 </li>
                 <li className="flex gap-5">
