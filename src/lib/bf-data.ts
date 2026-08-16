@@ -32,7 +32,7 @@ export interface Target {
   pedagogy: string;
 }
 
-export const TIE_ORDER: AreaId[] = ["AREA6", "AREA2", "AREA5", "AREA4", "AREA3", "AREA1"];
+export const TIE_ORDER: AreaId[] = ["AREA6", "AREA2", "AREA5", "AREA4", "AREA1", "AREA3"];
 
 export const AREAS: Record<AreaId, Area> = {
   AREA1: {
