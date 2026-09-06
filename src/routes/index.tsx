@@ -219,6 +219,7 @@ function Card({
   radio,
   radioIndex,
   radioCount,
+  radioTabStop,
   children,
 }: {
   selected?: boolean;
@@ -227,6 +228,7 @@ function Card({
   radio?: boolean;
   radioIndex?: number;
   radioCount?: number;
+  radioTabStop?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -239,7 +241,7 @@ function Card({
       aria-pressed={radio ? undefined : !!selected}
       aria-posinset={radio ? radioIndex : undefined}
       aria-setsize={radio ? radioCount : undefined}
-      tabIndex={radio ? (selected || radioIndex === 1 ? 0 : -1) : undefined}
+      tabIndex={radio ? (radioTabStop ? 0 : -1) : undefined}
       className={[
         "group relative w-full rounded-[13px] border p-5 pr-14 text-left text-[0.95rem] leading-relaxed",
         "transition-all duration-150 ease-out",
@@ -627,6 +629,7 @@ function Index() {
                   radio
                   radioIndex={index + 1}
                   radioCount={items.length}
+                  radioTabStop={focalId ? focalId === b.id : index === 0}
                   selected={focalId === b.id}
                   onClick={() => setFocalId(b.id)}
                 >
@@ -709,7 +712,7 @@ function Index() {
             </p>
             <RadioGroup label="How often this happens">
               {FREQUENCY.map((f, index) => (
-                <Card key={f} radio radioIndex={index + 1} radioCount={FREQUENCY.length} selected={frequency === f} onClick={() => setFrequency(f)}>
+                <Card key={f} radio radioIndex={index + 1} radioCount={FREQUENCY.length} radioTabStop={frequency ? frequency === f : index === 0} selected={frequency === f} onClick={() => setFrequency(f)}>
                   {f}
                 </Card>
               ))}
@@ -719,7 +722,7 @@ function Index() {
             </p>
             <RadioGroup label="Which learners this mostly affects">
               {WHO.map((w, index) => (
-                <Card key={w} radio radioIndex={index + 1} radioCount={WHO.length} selected={who === w} onClick={() => setWho(w)}>
+                <Card key={w} radio radioIndex={index + 1} radioCount={WHO.length} radioTabStop={who ? who === w : index === 0} selected={who === w} onClick={() => setWho(w)}>
                   {w}
                 </Card>
               ))}
@@ -750,6 +753,7 @@ function Index() {
                   radio
                   radioIndex={index + 1}
                   radioCount={items.length}
+                  radioTabStop={chosenArea ? chosenArea === a : index === 0}
                   selected={chosenArea === a}
                   onClick={() => setChosenArea(a)}
                 >
@@ -787,6 +791,7 @@ function Index() {
                   radio
                   radioIndex={index + 1}
                   radioCount={items.length}
+                  radioTabStop={targetIsInArea ? chosenTarget?.id === t.id : index === 0}
                   selected={chosenTarget?.id === t.id && targetIsInArea}
                   onClick={() => setChosenTarget(t)}
                 >
