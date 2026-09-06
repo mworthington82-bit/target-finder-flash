@@ -216,11 +216,17 @@ function Card({
   selected,
   onClick,
   disabled,
+  radio,
+  radioIndex,
+  radioCount,
   children,
 }: {
   selected?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  radio?: boolean;
+  radioIndex?: number;
+  radioCount?: number;
   children: React.ReactNode;
 }) {
   return (
@@ -228,13 +234,18 @@ function Card({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      aria-pressed={!!selected}
+      role={radio ? "radio" : undefined}
+      aria-checked={radio ? !!selected : undefined}
+      aria-pressed={radio ? undefined : !!selected}
+      aria-posinset={radio ? radioIndex : undefined}
+      aria-setsize={radio ? radioCount : undefined}
+      tabIndex={radio ? (selected || radioIndex === 1 ? 0 : -1) : undefined}
       className={[
         "group relative w-full rounded-[13px] border p-5 pr-14 text-left text-[0.95rem] leading-relaxed",
         "transition-all duration-150 ease-out",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         selected
-          ? "border-accent bg-accent/8 text-foreground shadow-[0_2px_10px_-6px_color-mix(in_oklab,var(--accent)_60%,transparent)]"
+          ? "border-primary bg-accent/20 text-foreground shadow-[0_2px_10px_-6px_color-mix(in_oklab,var(--foreground)_45%,transparent)]"
           : "border-border bg-card text-foreground hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-[0_6px_18px_-14px_var(--foreground)]",
         disabled && !selected ? "cursor-not-allowed opacity-40 hover:translate-y-0 hover:border-border hover:shadow-none" : "",
       ].join(" ")}
@@ -244,7 +255,7 @@ function Card({
         className={[
           "absolute right-4 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full border transition-all duration-150",
           selected
-            ? "border-accent bg-accent text-accent-foreground opacity-100"
+            ? "border-primary bg-accent text-accent-foreground opacity-100"
             : "border-border bg-transparent text-transparent opacity-0 group-hover:opacity-40",
         ].join(" ")}
         aria-hidden="true"
@@ -255,28 +266,73 @@ function Card({
   );
 }
 
-function ProgressBar({ current, total }: { current: number; total: number }) {
+function RadioGroup({
+  label,
+  children,
+  className = "space-y-3",
+}: {
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+    const radios = Array.from(
+      event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="radio"]:not(:disabled)'),
+    );
+    if (radios.length === 0) return;
+    const current = radios.indexOf(document.activeElement as HTMLButtonElement);
+    let next = current;
+    if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = radios.length - 1;
+    else if (event.key === "ArrowDown" || event.key === "ArrowRight") next = (current + 1) % radios.length;
+    else next = (current - 1 + radios.length) % radios.length;
+    event.preventDefault();
+    radios[next]?.focus();
+    radios[next]?.click();
+  };
+
   return (
-    <div className="mb-10 flex items-center gap-4">
+    <div role="radiogroup" aria-label={label} className={className} onKeyDown={onKeyDown}>
+      {children}
+    </div>
+  );
+}
+
+const JOURNEY_STAGES = ["What you're seeing", "Your focus", "Questions", "Context", "Your target"];
+
+function JourneyProgress({ step, question, questionTotal }: { step: Step; question: number; questionTotal: number }) {
+  const stage = step === "behaviours" ? 1 : step === "focal" ? 2 : step === "questions" ? 3 : step === "context" ? 4 : 5;
+  const label = JOURNEY_STAGES[stage - 1];
+  const questionText = step === "questions" ? ` · ${question} of ${questionTotal}` : "";
+
+  return (
+    <nav aria-label="Your progress" className="mb-10">
       <div
         role="progressbar"
         aria-valuemin={1}
-        aria-valuemax={total}
-        aria-valuenow={current}
-        aria-valuetext={`Question ${current} of ${total}`}
-        aria-label="Progress through the questions"
+        aria-valuemax={5}
+        aria-valuenow={stage}
+        aria-valuetext={`${label}, stage ${stage} of 5${step === "questions" ? `, question ${question} of ${questionTotal}` : ""}`}
+        aria-label="Progress through the target picker"
         className="h-[3px] w-full overflow-hidden rounded-full bg-border"
       >
         <div
-          className="h-full rounded-full bg-accent transition-[width] duration-300 ease-out"
-          style={{ width: `${(current / total) * 100}%` }}
+          className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
+          style={{ width: `${(stage / 5) * 100}%` }}
         />
       </div>
-
-      <span className="shrink-0 text-xs font-medium tabular-nums tracking-wide text-muted-foreground">
-        {current} of {total}
-      </span>
-    </div>
+      <ol className="mt-3 grid grid-cols-5 gap-1" aria-hidden="true">
+        {JOURNEY_STAGES.map((stageLabel, index) => (
+          <li
+            key={stageLabel}
+            className={`text-[0.625rem] leading-tight sm:text-xs ${index + 1 === stage ? "font-semibold text-foreground" : "text-muted-foreground"}`}
+          >
+            {stageLabel}{index + 1 === stage ? questionText : ""}
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
@@ -297,7 +353,7 @@ function PrimaryButton({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "rounded-[13px] bg-accent px-7 py-4 text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground",
+        "rounded-[13px] bg-primary px-7 py-4 text-sm font-medium tracking-wide text-primary-foreground transition-all duration-150 hover:brightness-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-muted-foreground",
         inline ? "w-auto" : "w-full sm:w-auto",
       ].join(" ")}
     >
@@ -498,6 +554,10 @@ function Index() {
       >
       <div key={key} className="bf-step">
 
+        {step !== "welcome" ? (
+          <JourneyProgress step={step} question={qIndex + 1} questionTotal={questionPlan.length} />
+        ) : null}
+
         {step === "welcome" && (
           <>
             <div className="pt-6 sm:pt-12">
@@ -556,20 +616,24 @@ function Index() {
 
         {step === "focal" && (
           <>
-            <Heading sub="Pick the one that matters most in this group right now.">
-              Which of these matters most?
+            <Heading sub="Of the ones you picked, which would you most like to work on with this group?">
+              Where would you like to start?
             </Heading>
-            <div className="space-y-3">
-              {BEHAVIOURS.filter((b) => selected.includes(b.id)).map((b) => (
+            <p className="mb-4 text-sm font-medium text-foreground">These are the ones you chose.</p>
+            <RadioGroup label="Behaviours you chose">
+              {BEHAVIOURS.filter((b) => selected.includes(b.id)).map((b, index, items) => (
                 <Card
                   key={b.id}
+                  radio
+                  radioIndex={index + 1}
+                  radioCount={items.length}
                   selected={focalId === b.id}
                   onClick={() => setFocalId(b.id)}
                 >
                   {b.statement}
                 </Card>
               ))}
-            </div>
+            </RadioGroup>
             <Actions onBack={() => setStep("behaviours")}>
               <PrimaryButton
                 inline
@@ -594,7 +658,6 @@ function Index() {
 
         {step === "questions" && questionPlan[qIndex] && (
           <>
-            <ProgressBar current={qIndex + 1} total={questionPlan.length} />
             <header className="mb-9">
               <h1 className="bf-display text-balance text-[1.4rem] leading-[1.28] text-foreground sm:text-[1.6rem]">
                 {questionPlan[qIndex].q.stem}
@@ -644,23 +707,23 @@ function Index() {
             <p className="mb-4 text-sm font-medium text-foreground">
               How often does this happen with this group?
             </p>
-            <div className="space-y-3">
-              {FREQUENCY.map((f) => (
-                <Card key={f} selected={frequency === f} onClick={() => setFrequency(f)}>
+            <RadioGroup label="How often this happens">
+              {FREQUENCY.map((f, index) => (
+                <Card key={f} radio radioIndex={index + 1} radioCount={FREQUENCY.length} selected={frequency === f} onClick={() => setFrequency(f)}>
                   {f}
                 </Card>
               ))}
-            </div>
+            </RadioGroup>
             <p className="mb-4 mt-12 text-sm font-medium text-foreground">
               When this happens, which learners is it mostly?
             </p>
-            <div className="space-y-3">
-              {WHO.map((w) => (
-                <Card key={w} selected={who === w} onClick={() => setWho(w)}>
+            <RadioGroup label="Which learners this mostly affects">
+              {WHO.map((w, index) => (
+                <Card key={w} radio radioIndex={index + 1} radioCount={WHO.length} selected={who === w} onClick={() => setWho(w)}>
                   {w}
                 </Card>
               ))}
-            </div>
+            </RadioGroup>
             <Actions
               onBack={() => {
                 setQIndex(Math.max(0, questionPlan.length - 1));
@@ -680,10 +743,13 @@ function Index() {
             <Heading sub="Two areas fit what you've described. Which one is closer to your group?">
               Two areas fit
             </Heading>
-            <div className="space-y-3">
-              {[result.top, result.runnerUp].map((a) => (
+            <RadioGroup label="Areas that fit what you described">
+              {[result.top, result.runnerUp].map((a, index, items) => (
                 <Card
                   key={a}
+                  radio
+                  radioIndex={index + 1}
+                  radioCount={items.length}
                   selected={chosenArea === a}
                   onClick={() => setChosenArea(a)}
                 >
@@ -691,7 +757,7 @@ function Index() {
                   <span className="mt-2 block text-muted-foreground">{AREAS[a].description}</span>
                 </Card>
               ))}
-            </div>
+            </RadioGroup>
             <Actions onBack={() => setStep("context")}>
               <PrimaryButton inline disabled={!chosenArea} onClick={() => setStep("targets")}>
                 Continue
@@ -714,17 +780,20 @@ function Index() {
               </p>
             </div>
             <p className="mb-4 text-sm font-medium text-foreground">Choose a target</p>
-            <div className="space-y-3">
-              {TARGETS[chosenArea].map((t) => (
+            <RadioGroup label={`Targets for ${AREAS[chosenArea].name}`}>
+              {TARGETS[chosenArea].map((t, index, items) => (
                 <Card
                   key={t.id}
+                  radio
+                  radioIndex={index + 1}
+                  radioCount={items.length}
                   selected={chosenTarget?.id === t.id && targetIsInArea}
                   onClick={() => setChosenTarget(t)}
                 >
                   {t.text}
                 </Card>
               ))}
-            </div>
+            </RadioGroup>
             <Actions onBack={() => setStep(viaCloseCall ? "closecall" : "context")}>
               <PrimaryButton inline disabled={!targetIsInArea} onClick={() => setStep("reflection")}>
                 {targetIsInArea ? "Continue with this target" : "Continue"}
@@ -834,7 +903,7 @@ function Index() {
                       href={formUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-center rounded-[13px] bg-accent px-6 py-4 text-center text-sm font-medium tracking-wide text-accent-foreground transition-all duration-150 hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
+                       className="inline-flex w-full items-center justify-center rounded-[13px] bg-primary px-6 py-4 text-center text-sm font-medium tracking-wide text-primary-foreground transition-all duration-150 hover:brightness-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
                     >
                       Open the RAISE Target Setting form
                     </a>
