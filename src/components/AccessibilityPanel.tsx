@@ -45,7 +45,7 @@ const BACKGROUND_OPTIONS: { value: Background; label: string; swatch: string }[]
   { value: "paper", label: "Paper", swatch: "#FAF8F5" },
   { value: "white", label: "White", swatch: "#FFFFFF" },
   { value: "cream", label: "Soft cream", swatch: "#F6EEDD" },
-  { value: "dark", label: "Dark", swatch: "#111C27" },
+  { value: "dark", label: "Dark", swatch: "#1A1A1A" },
 ];
 
 const TYPEFACE_OPTIONS: { value: Typeface; label: string }[] = [
@@ -108,12 +108,14 @@ function Choice({
         "flex min-h-11 items-center gap-2 rounded-[12px] border px-3 py-2 text-left text-sm transition-colors duration-150",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         selected
-          ? "border-accent bg-accent/10 font-semibold text-foreground"
+          ? "border-primary bg-accent/20 font-semibold text-foreground"
           : "border-border bg-card text-foreground hover:border-accent/50",
       ].join(" ")}
     >
       {children}
-      {selected ? <span aria-hidden="true" className="ml-auto text-accent">✓</span> : null}
+      {selected ? (
+        <span aria-hidden="true" className="ml-auto grid h-6 w-6 place-items-center rounded-full bg-accent text-accent-foreground">✓</span>
+      ) : null}
     </button>
   );
 }
